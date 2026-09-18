@@ -15,8 +15,8 @@ export default async function CollectionsIndexPage({ params }: { params: Promise
       <h1 className="font-display text-5xl">{locale === "ja" ? "コレクション" : "Collections"}</h1>
       <p className="mt-3 max-w-2xl text-foreground-muted">
         {locale === "ja"
-          ? "牛肉、豚肉、シャルキュトリーからスパイスまで、カテゴリーからお探しください。"
-          : "Browse beef, pork, charcuterie and more — or dive into a curated cut like grass-fed or Wagyu."}
+          ? "牛肉、シャルキュトリーからスパイスまで、カテゴリーからお探しください。"
+          : "Browse beef, charcuterie and more — or dive into a curated cut like grass-fed or Wagyu."}
       </p>
 
       <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">

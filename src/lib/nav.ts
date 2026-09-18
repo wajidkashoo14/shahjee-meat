@@ -1,6 +1,5 @@
 export const PRIMARY_CATEGORIES = [
   { slug: "beef", labelEn: "Beef", labelJa: "牛肉" },
-  { slug: "pork", labelEn: "Pork", labelJa: "豚肉" },
   { slug: "other-meats", labelEn: "Other Meats", labelJa: "その他の肉" },
   { slug: "charcuterie", labelEn: "Charcuterie", labelJa: "シャルキュトリー" },
   { slug: "new-arrivals", labelEn: "New Arrivals", labelJa: "新着" },

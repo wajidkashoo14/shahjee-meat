@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: "%s | Whole Cuts",
   },
   description:
-    "Grass-fed beef, pork, lamb, game and charcuterie shipped frozen across Japan. Steaks, block cuts, and chef-grade meat for home cooks.",
+    "Grass-fed beef, lamb, game and charcuterie shipped frozen across Japan. Steaks, block cuts, and chef-grade meat for home cooks.",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {

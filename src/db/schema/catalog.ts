@@ -38,7 +38,7 @@ export const products = sqliteTable(
     feed: text("feed"), // grass-fed | grain-fed | organic | null
     grade: text("grade"),
     cut: text("cut"),
-    category: text("category").notNull(), // beef | pork | other-meats | charcuterie | spices | frozen
+    category: text("category").notNull(), // beef | other-meats | charcuterie | spices | frozen
     tagsCsv: text("tags_csv").notNull().default(""), // comma separated tags for filtering
     status: text("status").notNull().default("published"), // draft | published | scheduled
     publishAt: integer("publish_at", { mode: "timestamp_ms" }),
