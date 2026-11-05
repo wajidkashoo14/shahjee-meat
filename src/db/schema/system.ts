@@ -1,7 +1,6 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
-import { sql } from "drizzle-orm";
+import { pgTable, text, integer, timestamp } from "drizzle-orm/pg-core";
 
-export const shippingZones = sqliteTable("shipping_zones", {
+export const shippingZones = pgTable("shipping_zones", {
   id: text("id").primaryKey(),
   prefecture: text("prefecture").notNull().unique(),
   baseFeeJpy: integer("base_fee_jpy").notNull().default(1200),
@@ -9,15 +8,15 @@ export const shippingZones = sqliteTable("shipping_zones", {
 });
 
 /** Single-row-ish key/value settings table for store-wide configuration. */
-export const settings = sqliteTable("settings", {
+export const settings = pgTable("settings", {
   key: text("key").primaryKey(),
   value: text("value").notNull(), // JSON-encoded
-  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+  updatedAt: timestamp("updated_at", { mode: "date", withTimezone: true })
     .notNull()
-    .default(sql`(unixepoch('now','subsec')*1000)`),
+    .defaultNow(),
 });
 
-export const auditLogs = sqliteTable("audit_logs", {
+export const auditLogs = pgTable("audit_logs", {
   id: text("id").primaryKey(),
   actorId: text("actor_id"),
   actorName: text("actor_name").notNull().default("system"),
@@ -25,7 +24,7 @@ export const auditLogs = sqliteTable("audit_logs", {
   targetType: text("target_type").notNull().default(""),
   targetId: text("target_id").notNull().default(""),
   detail: text("detail").notNull().default(""),
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
     .notNull()
-    .default(sql`(unixepoch('now','subsec')*1000)`),
+    .defaultNow(),
 });

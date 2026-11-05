@@ -1,5 +1,5 @@
 /**
- * Seeds the local SQLite database with demo content: 3 users (customer,
+ * Seeds the Postgres database with demo content: 3 users (customer,
  * staff, admin), tags, collections, ~40 products with weight variants,
  * reviews, Q&A, recipes, discount codes, shipping zones, store settings,
  * and a couple of sample orders so the dashboards aren't empty.
@@ -7,7 +7,8 @@
  * Run with: npm run db:seed
  */
 import { eq } from "drizzle-orm";
-import { db, sqlite } from "@/db";
+import { db, pool } from "@/db";
+import { sql } from "drizzle-orm";
 import * as schema from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { uuidv7, orderNumber } from "@/lib/id";
@@ -30,7 +31,7 @@ async function resetDatabase() {
     "tags", "collections",
     "verification", "account", "session", "user",
   ];
-  for (const t of tables) sqlite.exec(`DELETE FROM ${t};`);
+  await db.execute(sql.raw(`TRUNCATE TABLE ${tables.map((t) => `"${t}"`).join(", ")} CASCADE;`));
 }
 
 async function seedUsers() {
@@ -1446,5 +1447,5 @@ main()
     process.exit(1);
   })
   .finally(() => {
-    sqlite.close();
+    return pool.end();
   });

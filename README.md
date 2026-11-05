@@ -36,7 +36,7 @@ Two promo codes are seeded: `WELCOME10` (10% off, min ¥3,000) and `FREESHIP`
 
 - **Framework:** Next.js 16 (App Router, Turbopack), React 19, TypeScript strict.
 - **Styling:** Tailwind CSS v4, hand-rolled shadcn-style components on Radix primitives.
-- **Database:** SQLite (better-sqlite3) via Drizzle ORM — see [DECISIONS.md](./DECISIONS.md) for why, and how to swap to Postgres.
+- **Database:** Postgres (Neon) via Drizzle ORM + `pg`. Set `DATABASE_URL` to your Neon connection string, then `npm run db:migrate - **Database:** SQLite (better-sqlite3) via Drizzle ORM — see [DECISIONS.md](./DECISIONS.md) for why, and how to swap to Postgres.- **Database:** SQLite (better-sqlite3) via Drizzle ORM — see [DECISIONS.md](./DECISIONS.md) for why, and how to swap to Postgres. npm run db:seed`.
 - **Auth:** Better Auth (email/password, magic link, password reset, Google OAuth when configured, role-based access via the `admin` plugin).
 - **Payments:** Stripe Payment Element + PaymentIntents, with a test-payment fallback when no Stripe key is configured.
 - **i18n:** next-intl, locales `en` / `ja`, always-prefixed routes (`/en/...`, `/ja/...`).

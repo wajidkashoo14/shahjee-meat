@@ -1,9 +1,9 @@
-import { sqliteTable, text, integer, index, uniqueIndex } from "drizzle-orm/sqlite-core";
-import { relations, sql } from "drizzle-orm";
+import { pgTable, text, integer, boolean, timestamp, index, uniqueIndex } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 import { user } from "./auth";
 import { products } from "./catalog";
 
-export const reviews = sqliteTable(
+export const reviews = pgTable(
   "reviews",
   {
     id: text("id").primaryKey(),
@@ -15,17 +15,17 @@ export const reviews = sqliteTable(
     rating: integer("rating").notNull(), // 1-5
     title: text("title").notNull().default(""),
     body: text("body").notNull(),
-    verifiedPurchase: integer("verified_purchase", { mode: "boolean" }).notNull().default(false),
+    verifiedPurchase: boolean("verified_purchase").notNull().default(false),
     helpfulCount: integer("helpful_count").notNull().default(0),
     status: text("status").notNull().default("approved"), // pending | approved | hidden
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
+    createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
       .notNull()
-      .default(sql`(unixepoch('now','subsec')*1000)`),
+      .defaultNow(),
   },
   (t) => [index("reviews_product_idx").on(t.productId)],
 );
 
-export const reviewImages = sqliteTable("review_images", {
+export const reviewImages = pgTable("review_images", {
   id: text("id").primaryKey(),
   reviewId: text("review_id")
     .notNull()
@@ -33,7 +33,7 @@ export const reviewImages = sqliteTable("review_images", {
   url: text("url").notNull(),
 });
 
-export const questions = sqliteTable(
+export const questions = pgTable(
   "questions",
   {
     id: text("id").primaryKey(),
@@ -44,26 +44,26 @@ export const questions = sqliteTable(
     authorName: text("author_name").notNull(),
     body: text("body").notNull(),
     status: text("status").notNull().default("pending"), // pending | answered | hidden
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
+    createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
       .notNull()
-      .default(sql`(unixepoch('now','subsec')*1000)`),
+      .defaultNow(),
   },
   (t) => [index("questions_product_idx").on(t.productId)],
 );
 
-export const answers = sqliteTable("answers", {
+export const answers = pgTable("answers", {
   id: text("id").primaryKey(),
   questionId: text("question_id")
     .notNull()
     .references(() => questions.id, { onDelete: "cascade" }),
   authorName: text("author_name").notNull().default("Whole Cuts Staff"),
   body: text("body").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
     .notNull()
-    .default(sql`(unixepoch('now','subsec')*1000)`),
+    .defaultNow(),
 });
 
-export const wishlists = sqliteTable(
+export const wishlists = pgTable(
   "wishlists",
   {
     id: text("id").primaryKey(),
@@ -73,14 +73,14 @@ export const wishlists = sqliteTable(
     productId: text("product_id")
       .notNull()
       .references(() => products.id, { onDelete: "cascade" }),
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
+    createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
       .notNull()
-      .default(sql`(unixepoch('now','subsec')*1000)`),
+      .defaultNow(),
   },
   (t) => [uniqueIndex("wishlists_unique").on(t.userId, t.productId)],
 );
 
-export const stockAlerts = sqliteTable(
+export const stockAlerts = pgTable(
   "stock_alerts",
   {
     id: text("id").primaryKey(),
@@ -88,15 +88,15 @@ export const stockAlerts = sqliteTable(
     email: text("email").notNull(),
     variantId: text("variant_id").notNull(),
     productId: text("product_id").notNull(),
-    notified: integer("notified", { mode: "boolean" }).notNull().default(false),
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
+    notified: boolean("notified").notNull().default(false),
+    createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
       .notNull()
-      .default(sql`(unixepoch('now','subsec')*1000)`),
+      .defaultNow(),
   },
   (t) => [index("stock_alerts_variant_idx").on(t.variantId)],
 );
 
-export const inquiries = sqliteTable("inquiries", {
+export const inquiries = pgTable("inquiries", {
   id: text("id").primaryKey(),
   kind: text("kind").notNull().default("general"), // general | wholesale | product
   productId: text("product_id"),
@@ -105,9 +105,9 @@ export const inquiries = sqliteTable("inquiries", {
   company: text("company").notNull().default(""),
   message: text("message").notNull(),
   status: text("status").notNull().default("open"), // open | replied | closed
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
     .notNull()
-    .default(sql`(unixepoch('now','subsec')*1000)`),
+    .defaultNow(),
 });
 
 export const reviewsRelations = relations(reviews, ({ many }) => ({

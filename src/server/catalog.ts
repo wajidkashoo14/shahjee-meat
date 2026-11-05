@@ -1,5 +1,5 @@
 import "server-only";
-import { and, eq, inArray, sql } from "drizzle-orm";
+import { and, eq, gt, inArray, lt, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { products, productVariants, productImages, productCollections, collections } from "@/db/schema";
 
@@ -206,11 +206,11 @@ export async function getRelatedProducts(productId: string, category: string, li
 
 export async function getAdjacentProducts(category: string, createdAt: Date) {
   const next = await db.query.products.findFirst({
-    where: and(eq(products.category, category), sql`${products.createdAt} < ${createdAt.getTime()}`),
+    where: and(eq(products.category, category), lt(products.createdAt, createdAt)),
     orderBy: (p, { desc }) => [desc(p.createdAt)],
   });
   const prev = await db.query.products.findFirst({
-    where: and(eq(products.category, category), sql`${products.createdAt} > ${createdAt.getTime()}`),
+    where: and(eq(products.category, category), gt(products.createdAt, createdAt)),
     orderBy: (p, { asc }) => [asc(p.createdAt)],
   });
   return { next, prev };

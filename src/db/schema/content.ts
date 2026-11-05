@@ -1,8 +1,8 @@
-import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
-import { relations, sql } from "drizzle-orm";
+import { pgTable, text, integer, timestamp, index } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 import { products } from "./catalog";
 
-export const recipes = sqliteTable("recipes", {
+export const recipes = pgTable("recipes", {
   id: text("id").primaryKey(),
   slug: text("slug").notNull().unique(),
   titleEn: text("title_en").notNull(),
@@ -17,12 +17,12 @@ export const recipes = sqliteTable("recipes", {
   difficulty: text("difficulty").notNull().default("easy"), // easy | medium | hard
   servings: integer("servings").notNull().default(2),
   status: text("status").notNull().default("published"), // draft | published
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
     .notNull()
-    .default(sql`(unixepoch('now','subsec')*1000)`),
+    .defaultNow(),
 });
 
-export const recipeProducts = sqliteTable(
+export const recipeProducts = pgTable(
   "recipe_products",
   {
     id: text("id").primaryKey(),

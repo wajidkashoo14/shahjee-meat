@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { pgTable, text, integer, boolean, timestamp } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 /**
@@ -6,22 +6,22 @@ import { relations } from "drizzle-orm";
  * (the JS keys) must match what Better Auth expects; DB column names can
  * differ and are given explicitly below.
  */
-export const user = sqliteTable("user", {
+export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
-  emailVerified: integer("email_verified", { mode: "boolean" })
+  emailVerified: boolean("email_verified")
     .notNull()
     .default(false),
   image: text("image"),
-  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true }).notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date", withTimezone: true }).notNull(),
 
   // better-auth "admin" plugin fields
   role: text("role").notNull().default("customer"), // customer | staff | admin
-  banned: integer("banned", { mode: "boolean" }).notNull().default(false),
+  banned: boolean("banned").notNull().default(false),
   banReason: text("ban_reason"),
-  banExpires: integer("ban_expires", { mode: "timestamp_ms" }),
+  banExpires: timestamp("ban_expires", { mode: "date", withTimezone: true }),
 
   // our own additional fields
   locale: text("locale").notNull().default("en"),
@@ -29,12 +29,12 @@ export const user = sqliteTable("user", {
   phone: text("phone"),
 });
 
-export const session = sqliteTable("session", {
+export const session = pgTable("session", {
   id: text("id").primaryKey(),
-  expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
+  expiresAt: timestamp("expires_at", { mode: "date", withTimezone: true }).notNull(),
   token: text("token").notNull().unique(),
-  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true }).notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date", withTimezone: true }).notNull(),
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
   userId: text("user_id")
@@ -43,7 +43,7 @@ export const session = sqliteTable("session", {
   impersonatedBy: text("impersonated_by"),
 });
 
-export const account = sqliteTable("account", {
+export const account = pgTable("account", {
   id: text("id").primaryKey(),
   accountId: text("account_id").notNull(),
   providerId: text("provider_id").notNull(),
@@ -53,25 +53,21 @@ export const account = sqliteTable("account", {
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
   idToken: text("id_token"),
-  accessTokenExpiresAt: integer("access_token_expires_at", {
-    mode: "timestamp_ms",
-  }),
-  refreshTokenExpiresAt: integer("refresh_token_expires_at", {
-    mode: "timestamp_ms",
-  }),
+  accessTokenExpiresAt: timestamp("access_token_expires_at", { mode: "date", withTimezone: true }),
+  refreshTokenExpiresAt: timestamp("refresh_token_expires_at", { mode: "date", withTimezone: true }),
   scope: text("scope"),
   password: text("password"),
-  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true }).notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date", withTimezone: true }).notNull(),
 });
 
-export const verification = sqliteTable("verification", {
+export const verification = pgTable("verification", {
   id: text("id").primaryKey(),
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
-  expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
-  createdAt: integer("created_at", { mode: "timestamp_ms" }),
-  updatedAt: integer("updated_at", { mode: "timestamp_ms" }),
+  expiresAt: timestamp("expires_at", { mode: "date", withTimezone: true }).notNull(),
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true }),
+  updatedAt: timestamp("updated_at", { mode: "date", withTimezone: true }),
 });
 
 export const userRelations = relations(user, ({ many }) => ({

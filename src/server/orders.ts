@@ -1,6 +1,6 @@
 import "server-only";
-import { eq, sql } from "drizzle-orm";
-import { db, sqlite } from "@/db";
+import { and, eq, gte, sql } from "drizzle-orm";
+import { db } from "@/db";
 import {
   orders,
   orderItems,
@@ -61,22 +61,22 @@ export async function placeOrder(cartId: string, userId: string | null, info: Sh
   const orderId = uuidv7();
   const orderNo = orderNumber();
 
-  const runTxn = sqlite.transaction(() => {
+  await db.transaction(async (tx) => {
     for (const line of pricing.lines) {
-      const variant = db.select().from(productVariants).where(eq(productVariants.id, line.variantId)).get();
-      if (!variant || variant.stock < line.quantity) {
+      // Atomic reserve: only succeeds if enough stock remains (safe under concurrency).
+      const reserved = await tx
+        .update(productVariants)
+        .set({ stock: sql`${productVariants.stock} - ${line.quantity}` })
+        .where(and(eq(productVariants.id, line.variantId), gte(productVariants.stock, line.quantity)))
+        .returning({ id: productVariants.id });
+      if (reserved.length === 0) {
         throw new OutOfStockError(`Not enough stock for variant ${line.variantId}`);
       }
-      db.update(productVariants)
-        .set({ stock: sql`${productVariants.stock} - ${line.quantity}` })
-        .where(eq(productVariants.id, line.variantId))
-        .run();
-      db.insert(inventoryMovements)
-        .values({ id: uuidv7(), variantId: line.variantId, change: -line.quantity, reason: "order", note: orderNo })
-        .run();
+      await tx.insert(inventoryMovements)
+        .values({ id: uuidv7(), variantId: line.variantId, change: -line.quantity, reason: "order", note: orderNo });
     }
 
-    db.insert(orders)
+    await tx.insert(orders)
       .values({
         id: orderId,
         orderNumber: orderNo,
@@ -105,14 +105,58 @@ export async function placeOrder(cartId: string, userId: string | null, info: Sh
         paymentMethod: info.paymentMethod,
         paymentIntentId: info.paymentIntentId ?? null,
         cancelCutoffAt: new Date(Date.now() + 12 * 3600 * 1000),
-      })
-      .run();
+      });
 
     for (const line of pricing.lines) {
-      const variant = db.select().from(productVariants).where(eq(productVariants.id, line.variantId)).get()!;
-      const product = db.select().from(products).where(eq(products.id, line.productId)).get()!;
-      const image = db.select().from(productImages).where(eq(productImages.productId, line.productId)).get();
-      db.insert(orderItems)
+      // Atomic reserve: only succeeds if enough stock remains (safe under concurrency).
+      const reserved = await tx
+        .update(productVariants)
+        .set({ stock: sql`${productVariants.stock} - ${line.quantity}` })
+        .where(and(eq(productVariants.id, line.variantId), gte(productVariants.stock, line.quantity)))
+        .returning({ id: productVariants.id });
+      if (reserved.length === 0) {
+        throw new OutOfStockError(`Not enough stock for variant ${line.variantId}`);
+      }
+      await tx.insert(inventoryMovements)
+        .values({ id: uuidv7(), variantId: line.variantId, change: -line.quantity, reason: "order", note: orderNo });
+    }
+
+    await tx.insert(orders)
+      .values({
+        id: orderId,
+        orderNumber: orderNo,
+        userId,
+        email: info.email,
+        status: "paid",
+        subtotalJpy: pricing.subtotalJpy,
+        shippingJpy: pricing.shippingJpy,
+        discountJpy: pricing.discountJpy,
+        taxJpy: pricing.taxJpy,
+        totalJpy: pricing.totalJpy,
+        pointsEarned: pricing.pointsEarned,
+        pointsRedeemed: info.redeemPoints ?? 0,
+        promoCode: info.promoCode || null,
+        shippingName: info.fullName,
+        shippingNameKana: info.fullNameKana,
+        shippingPhone: info.phone,
+        shippingPostalCode: info.postalCode,
+        shippingPrefecture: info.prefecture,
+        shippingCity: info.city,
+        shippingAddressLine1: info.addressLine1,
+        shippingAddressLine2: info.addressLine2 || "",
+        deliveryDate: info.deliveryDate,
+        deliverySlot: info.deliverySlot,
+        giftNote: info.giftNote || "",
+        paymentMethod: info.paymentMethod,
+        paymentIntentId: info.paymentIntentId ?? null,
+        cancelCutoffAt: new Date(Date.now() + 12 * 3600 * 1000),
+      });
+
+    for (const line of pricing.lines) {
+      const [variant] = await tx.select().from(productVariants).where(eq(productVariants.id, line.variantId)).limit(1);
+      const [product] = await tx.select().from(products).where(eq(products.id, line.productId)).limit(1);
+      const [image] = await tx.select().from(productImages).where(eq(productImages.productId, line.productId)).limit(1);
+      await tx.insert(orderItems)
         .values({
           id: uuidv7(),
           orderId,
@@ -126,41 +170,34 @@ export async function placeOrder(cartId: string, userId: string | null, info: Sh
           unitPriceJpy: line.unitPriceJpy,
           quantity: line.quantity,
           lineTotalJpy: line.lineTotalJpy,
-        })
-        .run();
+        });
     }
 
     if (userId) {
       if (pricing.pointsEarned > 0) {
-        db.insert(loyaltyLedger)
-          .values({ id: uuidv7(), userId, points: pricing.pointsEarned, reason: "order", orderId })
-          .run();
+        await tx.insert(loyaltyLedger)
+          .values({ id: uuidv7(), userId, points: pricing.pointsEarned, reason: "order", orderId });
       }
       if ((info.redeemPoints ?? 0) > 0) {
-        db.insert(loyaltyLedger)
-          .values({ id: uuidv7(), userId, points: -(info.redeemPoints ?? 0), reason: "redeem", orderId })
-          .run();
+        await tx.insert(loyaltyLedger)
+          .values({ id: uuidv7(), userId, points: -(info.redeemPoints ?? 0), reason: "redeem", orderId });
       }
       const net = pricing.pointsEarned - (info.redeemPoints ?? 0);
-      db.update(userTable)
+      await tx.update(userTable)
         .set({ pointsBalance: sql`${userTable.pointsBalance} + ${net}` })
-        .where(eq(userTable.id, userId))
-        .run();
+        .where(eq(userTable.id, userId));
     }
 
     if (info.promoCode) {
-      const code = db.select().from(discounts).where(eq(discounts.code, info.promoCode.toUpperCase())).get();
+      const [code] = await tx.select().from(discounts).where(eq(discounts.code, info.promoCode.toUpperCase())).limit(1);
       if (code) {
-        db.update(discounts)
+        await tx.update(discounts)
           .set({ timesUsed: sql`${discounts.timesUsed} + 1` })
-          .where(eq(discounts.id, code.id))
-          .run();
-        db.insert(discountRedemptions).values({ id: uuidv7(), discountId: code.id, orderId, userId }).run();
+          .where(eq(discounts.id, code.id));
+        await tx.insert(discountRedemptions).values({ id: uuidv7(), discountId: code.id, orderId, userId });
       }
     }
   });
-
-  runTxn();
 
   await clearCart(cartId);
 

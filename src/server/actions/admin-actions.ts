@@ -133,7 +133,7 @@ export async function adjustInventoryAction(input: { variantId: string; change: 
   const admin = await requireStaffOrAdmin();
   await db
     .update(productVariants)
-    .set({ stock: sql`MAX(0, ${productVariants.stock} + ${input.change})` })
+    .set({ stock: sql`GREATEST(0, ${productVariants.stock} + ${input.change})` })
     .where(eq(productVariants.id, input.variantId));
   await db.insert(inventoryMovements).values({
     id: uuidv7(), variantId: input.variantId, change: input.change, reason: input.reason,

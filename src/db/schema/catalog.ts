@@ -1,7 +1,7 @@
-import { sqliteTable, text, integer, real, index, uniqueIndex } from "drizzle-orm/sqlite-core";
-import { relations, sql } from "drizzle-orm";
+import { pgTable, text, integer, boolean, timestamp, doublePrecision, index, uniqueIndex } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
-export const collections = sqliteTable("collections", {
+export const collections = pgTable("collections", {
   id: text("id").primaryKey(),
   slug: text("slug").notNull().unique(),
   titleEn: text("title_en").notNull(),
@@ -13,15 +13,15 @@ export const collections = sqliteTable("collections", {
   kind: text("kind").notNull().default("manual"), // manual | rule
   ruleTag: text("rule_tag"), // e.g. "grass-fed", "steaks", "organic"
   sortOrder: integer("sort_order").notNull().default(0),
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
     .notNull()
-    .default(sql`(unixepoch('now','subsec')*1000)`),
-  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date", withTimezone: true })
     .notNull()
-    .default(sql`(unixepoch('now','subsec')*1000)`),
+    .defaultNow(),
 });
 
-export const products = sqliteTable(
+export const products = pgTable(
   "products",
   {
     id: text("id").primaryKey(),
@@ -41,24 +41,24 @@ export const products = sqliteTable(
     category: text("category").notNull(), // beef | other-meats | charcuterie | spices | frozen
     tagsCsv: text("tags_csv").notNull().default(""), // comma separated tags for filtering
     status: text("status").notNull().default("published"), // draft | published | scheduled
-    publishAt: integer("publish_at", { mode: "timestamp_ms" }),
-    isNewArrival: integer("is_new_arrival", { mode: "boolean" }).notNull().default(false),
+    publishAt: timestamp("publish_at", { mode: "date", withTimezone: true }),
+    isNewArrival: boolean("is_new_arrival").notNull().default(false),
     salesCount: integer("sales_count").notNull().default(0),
-    ratingAvg: real("rating_avg").notNull().default(0),
+    ratingAvg: doublePrecision("rating_avg").notNull().default(0),
     ratingCount: integer("rating_count").notNull().default(0),
     seoTitle: text("seo_title"),
     seoDescription: text("seo_description"),
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
+    createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
       .notNull()
-      .default(sql`(unixepoch('now','subsec')*1000)`),
-    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { mode: "date", withTimezone: true })
       .notNull()
-      .default(sql`(unixepoch('now','subsec')*1000)`),
+      .defaultNow(),
   },
   (t) => [index("products_category_idx").on(t.category), index("products_status_idx").on(t.status)],
 );
 
-export const productImages = sqliteTable(
+export const productImages = pgTable(
   "product_images",
   {
     id: text("id").primaryKey(),
@@ -73,7 +73,7 @@ export const productImages = sqliteTable(
 );
 
 /** Weight-range variants, e.g. "0.6kg~0.8kg", each with its own price/stock. */
-export const productVariants = sqliteTable(
+export const productVariants = pgTable(
   "product_variants",
   {
     id: text("id").primaryKey(),
@@ -88,14 +88,14 @@ export const productVariants = sqliteTable(
     compareAtPriceJpy: integer("compare_at_price_jpy"), // set when on sale
     stock: integer("stock").notNull().default(0),
     sortOrder: integer("sort_order").notNull().default(0),
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
+    createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
       .notNull()
-      .default(sql`(unixepoch('now','subsec')*1000)`),
+      .defaultNow(),
   },
   (t) => [index("product_variants_product_idx").on(t.productId)],
 );
 
-export const tags = sqliteTable("tags", {
+export const tags = pgTable("tags", {
   id: text("id").primaryKey(),
   slug: text("slug").notNull().unique(),
   labelEn: text("label_en").notNull(),
@@ -103,7 +103,7 @@ export const tags = sqliteTable("tags", {
   kind: text("kind").notNull().default("general"), // general | origin | cut | feed | grade
 });
 
-export const productCollections = sqliteTable(
+export const productCollections = pgTable(
   "product_collections",
   {
     id: text("id").primaryKey(),
@@ -117,7 +117,7 @@ export const productCollections = sqliteTable(
   (t) => [uniqueIndex("product_collections_unique").on(t.productId, t.collectionId)],
 );
 
-export const inventoryMovements = sqliteTable(
+export const inventoryMovements = pgTable(
   "inventory_movements",
   {
     id: text("id").primaryKey(),
@@ -128,9 +128,9 @@ export const inventoryMovements = sqliteTable(
     reason: text("reason").notNull(), // "order" | "restock" | "manual-adjustment" | "return"
     note: text("note").notNull().default(""),
     createdBy: text("created_by"),
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
+    createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
       .notNull()
-      .default(sql`(unixepoch('now','subsec')*1000)`),
+      .defaultNow(),
   },
   (t) => [index("inventory_movements_variant_idx").on(t.variantId)],
 );

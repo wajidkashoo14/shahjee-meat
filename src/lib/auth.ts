@@ -11,7 +11,7 @@ const hasLine = !!(process.env.LINE_CLIENT_ID && process.env.LINE_CLIENT_SECRET)
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
-    provider: "sqlite",
+    provider: "pg",
     schema: {
       user: schema.user,
       session: schema.session,

@@ -1,33 +1,33 @@
-import Database from "better-sqlite3";
-import { drizzle, type BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import fs from "node:fs";
-import path from "node:path";
+import { Pool } from "pg";
+import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import * as schema from "./schema";
 
-const DB_PATH =
-  process.env.DATABASE_URL?.replace(/^file:/, "") ||
-  path.join(process.cwd(), "data", "wholecuts.db");
-
-type DB = BetterSQLite3Database<typeof schema>;
+type DB = NodePgDatabase<typeof schema>;
 
 declare global {
-  var __sqlite: Database.Database | undefined;
+  var __pool: Pool | undefined;
   var __db: DB | undefined;
 }
 
-function getSqlite() {
-  if (!globalThis.__sqlite) {
-    fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
-    const s = new Database(DB_PATH);
-    s.pragma("journal_mode = WAL");
-    s.pragma("foreign_keys = ON");
-    globalThis.__sqlite = s;
+function getPool() {
+  if (!globalThis.__pool) {
+    const url = process.env.DATABASE_URL;
+    if (!url || !/^postgres(ql)?:\/\//.test(url)) {
+      throw new Error(
+        "DATABASE_URL must be a Postgres connection string (e.g. your Neon URL).",
+      );
+    }
+    globalThis.__pool = new Pool({
+      connectionString: url,
+      // Keep the pool small: each serverless instance gets its own.
+      max: process.env.VERCEL ? 3 : 10,
+    });
   }
-  return globalThis.__sqlite;
+  return globalThis.__pool;
 }
 
 function getDb() {
-  return (globalThis.__db ??= drizzle(getSqlite(), { schema }));
+  return (globalThis.__db ??= drizzle(getPool(), { schema }));
 }
 
 function lazy<T extends object>(get: () => T): T {
@@ -40,6 +40,7 @@ function lazy<T extends object>(get: () => T): T {
   });
 }
 
-export const sqlite = lazy(getSqlite);
+/** Raw pg pool (used for closing connections in scripts). */
+export const pool = lazy(getPool);
 export const db = lazy(getDb);
 export { schema };
