@@ -6,28 +6,31 @@
   Tokens follow BUILD_PROMPT.md §6.
 */
 
+/*
+  Palette: exactly three colors.
+    charcoal  #131110  dark neutral (backgrounds / text)
+    bone      #f3ede3  light neutral (text / backgrounds)
+    ember     #c2410c  the single accent (buttons, links, highlights, alerts)
+  Every other token (surfaces, borders, muted text, success, sale, ...) is a
+  tint/alias of these three, so no extra hues appear anywhere in the UI.
+*/
 :root {
   --color-charcoal: #131110;
-  --color-charcoal-soft: #1c1917;
   --color-bone: #f3ede3;
-  --color-bone-soft: #e8dfd0;
   --color-ember: #c2410c;
-  --color-ember-soft: #ea580c;
-  --color-oxblood: #5b1a18;
-  --color-sage: #7c8b6a;
-  --color-brass: #b08d57;
+  --color-ember-soft: #ea580c; /* ember, lightened for hover / dark-mode text */
 
   --background: var(--color-charcoal);
-  --surface: var(--color-charcoal-soft);
+  --surface: #1c1917;
   --surface-raised: #241f1c;
   --foreground: var(--color-bone);
   --foreground-muted: #b8ada0;
   --border: #34302c;
   --primary: var(--color-ember);
-  --primary-foreground: #fff7ed;
-  --accent: var(--color-brass);
-  --sale: #e0654a;
-  --success: var(--color-sage);
+  --primary-foreground: var(--color-bone);
+  --accent: var(--color-ember-soft);
+  --sale: var(--color-ember-soft);
+  --success: var(--color-bone);
   --ring: var(--color-ember-soft);
 }
 
@@ -39,10 +42,10 @@
   --foreground-muted: #6b6156;
   --border: #ddd2c2;
   --primary: var(--color-ember);
-  --primary-foreground: #fff7ed;
-  --accent: var(--color-brass);
-  --sale: var(--color-oxblood);
-  --success: #4f6144;
+  --primary-foreground: var(--color-bone);
+  --accent: var(--color-ember);
+  --sale: var(--color-ember);
+  --success: var(--color-charcoal);
   --ring: var(--color-ember);
 }
 
@@ -55,10 +58,10 @@
     --foreground-muted: #6b6156;
     --border: #ddd2c2;
     --primary: var(--color-ember);
-    --primary-foreground: #fff7ed;
-    --accent: var(--color-brass);
-    --sale: var(--color-oxblood);
-    --success: #4f6144;
+    --primary-foreground: var(--color-bone);
+    --accent: var(--color-ember);
+    --sale: var(--color-ember);
+    --success: var(--color-charcoal);
     --ring: var(--color-ember);
   }
 }
@@ -78,9 +81,11 @@
   --color-ring: var(--ring);
   --color-bone: var(--color-bone);
   --color-charcoal: var(--color-charcoal);
-  --color-sage: var(--color-sage);
-  --color-brass: var(--color-brass);
-  --color-oxblood: var(--color-oxblood);
+  --color-ember: var(--color-ember);
+  /* legacy names kept as aliases of the 3-color palette */
+  --color-brass: var(--accent);
+  --color-sage: var(--success);
+  --color-oxblood: var(--color-ember);
 
   --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
   --font-sans: var(--font-geist-sans), var(--font-noto-jp), ui-sans-serif, system-ui, sans-serif;

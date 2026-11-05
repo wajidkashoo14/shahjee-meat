@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { collectionPhoto, heroPhoto } from "@/db/photos";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Snowflake, Truck, MapPinned, ShieldCheck } from "lucide-react";
 import { Link } from "@/i18n/navigation";
@@ -28,7 +29,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       {/* Hero */}
       <section className="relative flex min-h-[80vh] items-end overflow-hidden">
         <Image
-          src="https://picsum.photos/seed/wc-hero/1800/1200"
+          src={heroPhoto()}
           alt=""
           fill
           priority
@@ -72,7 +73,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             >
               <div className={`relative ${i === 0 ? "aspect-square sm:aspect-[4/3]" : "aspect-square"}`}>
                 <Image
-                  src={`https://picsum.photos/seed/wc-cat-${c.slug}/700/700`}
+                  src={collectionPhoto(c.slug)}
                   alt={c.labelEn}
                   fill
                   sizes="(min-width: 1024px) 25vw, 50vw"

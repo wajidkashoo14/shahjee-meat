@@ -77,7 +77,7 @@ export function CartPageClient({ initialSummary }: { initialSummary: CartSummary
       <div className="flex flex-col gap-6">
         <div className="h-2 w-full overflow-hidden rounded-full bg-surface-raised">
           <div
-            className="h-full bg-gradient-to-r from-sage to-primary transition-all"
+            className="h-full bg-primary transition-all"
             style={{ width: `${Math.min(100, (summary.pricing.subtotalJpy / FREE_SHIPPING_THRESHOLD_JPY) * 100)}%` }}
           />
         </div>

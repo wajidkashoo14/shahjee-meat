@@ -14,7 +14,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:seed": "tsx --env-file=.env.local src/db/seed.ts"
+    "db:seed": "tsx --env-file=.env.local src/db/seed.ts",
+    "db:images": "tsx --env-file=.env.local src/db/refresh-images.ts"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.20",

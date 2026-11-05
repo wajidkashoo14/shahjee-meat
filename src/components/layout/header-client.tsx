@@ -29,12 +29,12 @@ export function HeaderClient({ isSignedIn, role }: { isSignedIn: boolean; role?:
 
   return (
     <header className="print-hide sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 max-[360px]:gap-2 max-[360px]:px-3 sm:px-6">
         <div className="flex items-center gap-2">
           <button className="lg:hidden p-2 -ml-2" onClick={() => setMobileOpen(true)} aria-label="Open menu">
             <Menu className="size-5" />
           </button>
-          <Link href="/" className="font-display text-xl font-semibold tracking-tight">
+          <Link href="/" className="font-display text-xl font-semibold tracking-tight max-[360px]:text-lg">
             Whole Cuts
           </Link>
         </div>

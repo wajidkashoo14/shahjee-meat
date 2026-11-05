@@ -1,4 +1,5 @@
 "use client";
+import { collectionPhoto } from "@/db/photos";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Plus, Pencil } from "lucide-react";
@@ -23,7 +24,7 @@ export function CollectionFormDialog({ collection }: { collection?: Collection }
     titleJa: collection?.titleJa ?? "",
     descriptionEn: collection?.descriptionEn ?? "",
     descriptionJa: collection?.descriptionJa ?? "",
-    heroImage: collection?.heroImage ?? "https://picsum.photos/seed/new-collection/800/600",
+    heroImage: collection?.heroImage ?? collectionPhoto("beef"),
     kind: (collection?.kind as "manual" | "rule") ?? "manual",
     ruleTag: collection?.ruleTag ?? "",
     sortOrder: collection?.sortOrder ?? 0,

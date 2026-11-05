@@ -2,12 +2,12 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 const COLORS: Record<string, string> = {
-  paid: "bg-brass/20 text-brass",
-  packing: "bg-blue-500/20 text-blue-400",
-  shipped: "bg-sage/20 text-sage",
-  delivered: "bg-success/20 text-success",
+  paid: "bg-primary/20 text-accent",
+  packing: "bg-foreground/10 text-foreground",
+  shipped: "bg-foreground/10 text-foreground",
+  delivered: "bg-foreground text-background",
   cancelled: "bg-foreground-muted/20 text-foreground-muted",
-  refunded: "bg-sale/20 text-sale",
+  refunded: "bg-primary text-primary-foreground",
 };
 
 export function OrderStatusBadge({ status }: { status: string }) {

@@ -52,7 +52,7 @@ export function CartSheet() {
         <div className="px-6">
           <div className="h-2 w-full overflow-hidden rounded-full bg-surface-raised">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-sage to-primary transition-all duration-500"
+              className="h-full rounded-full bg-primary transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>

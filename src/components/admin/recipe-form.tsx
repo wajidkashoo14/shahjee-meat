@@ -1,4 +1,5 @@
 "use client";
+import { recipePhoto } from "@/db/photos";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Loader2, Trash2 } from "lucide-react";
@@ -44,7 +45,7 @@ export function RecipeForm({ initial, products }: { initial?: Partial<RecipeForm
     excerptJa: initial?.excerptJa ?? "",
     bodyEn: initial?.bodyEn ?? "",
     bodyJa: initial?.bodyJa ?? "",
-    heroImage: initial?.heroImage ?? "https://picsum.photos/seed/new-recipe/900/600",
+    heroImage: initial?.heroImage ?? recipePhoto("grill", "new"),
     category: initial?.category ?? "grill",
     cookTimeMinutes: initial?.cookTimeMinutes ?? 30,
     difficulty: initial?.difficulty ?? "easy",

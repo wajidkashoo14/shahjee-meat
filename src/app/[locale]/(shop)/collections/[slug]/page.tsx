@@ -73,7 +73,7 @@ export default async function CollectionPage({
         <h1 className="font-display text-4xl">{title}</h1>
         {desc && <p className="mt-3 max-w-2xl text-foreground-muted">{desc}</p>}
 
-        <div className="mt-8 flex items-center justify-between gap-4">
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-3 sm:gap-4">
           <p className="text-sm text-foreground-muted">{t("resultsCount", { count: total })}</p>
           <div className="flex items-center gap-2">
             <Sheet>

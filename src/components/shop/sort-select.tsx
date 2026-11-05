@@ -12,8 +12,8 @@ export function SortSelect() {
 
   return (
     <Select value={sort} onValueChange={(v) => setSort(v as SortOption)}>
-      <SelectTrigger className="w-56">
-        <span className="text-foreground-muted mr-1">{t("sortBy")}:</span>
+      <SelectTrigger className="w-44 sm:w-56">
+        <span className="mr-1 hidden whitespace-nowrap text-foreground-muted sm:inline">{t("sortBy")}:</span>
         <SelectValue />
       </SelectTrigger>
       <SelectContent>

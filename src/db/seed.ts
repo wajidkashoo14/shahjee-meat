@@ -13,10 +13,7 @@ import * as schema from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { uuidv7, orderNumber } from "@/lib/id";
 import { PREFECTURES } from "@/lib/shipping";
-
-function img(seed: string, n = 1) {
-  return `https://picsum.photos/seed/wc-${seed}-${n}/1000/1000`;
-}
+import { collectionPhoto, productPhoto, recipePhoto } from "./photos";
 
 async function resetDatabase() {
   console.log("Clearing existing data…");
@@ -1005,7 +1002,7 @@ async function seedCollections() {
       titleJa: c.ja,
       descriptionEn: c.descEn,
       descriptionJa: c.descJa,
-      heroImage: img(`collection-${c.slug}`),
+      heroImage: collectionPhoto(c.slug),
       kind: c.slug === "new-arrivals" ? "rule" : "manual",
       ruleTag: c.slug === "new-arrivals" ? "new-arrival" : null,
       sortOrder: i,
@@ -1027,7 +1024,7 @@ async function seedCollections() {
       titleJa: c.ja,
       descriptionEn: `${c.en} — curated from across our catalog.`,
       descriptionJa: `${c.ja}の商品をまとめました。`,
-      heroImage: img(`collection-${c.slug}`),
+      heroImage: collectionPhoto(c.slug),
       kind: "rule",
       ruleTag: c.ruleTag,
       sortOrder: 100 + i,
@@ -1071,7 +1068,7 @@ async function seedProducts() {
       await db.insert(schema.productImages).values({
         id: uuidv7(),
         productId,
-        url: img(p.slug, i + 1),
+        url: productPhoto(p.category, p.slug, i),
         alt: p.nameEn,
         sortOrder: i,
       });
@@ -1209,7 +1206,7 @@ async function seedRecipes() {
       excerptJa: r.excerptJa,
       bodyEn: `## Ingredients\n\n- The featured cut, brought to room temperature\n- Salt and freshly cracked pepper\n- 2 tbsp neutral oil\n- Optional: compound butter or herb garnish to finish\n\n## Method\n\n1. Prepare the meat and pat it fully dry.\n2. Season generously and let it rest at room temperature for 20–30 minutes.\n3. Cook according to the linked product's cooking guide.\n4. Rest before slicing, then serve immediately.\n\nEnjoy with a simple side and a good bottle of red.`,
       bodyJa: `## 材料\n\n- メインとなるお肉（室温に戻しておく）\n- 塩・挽きたての黒胡椒\n- 食用油 大さじ2\n- お好みでコンパウンドバターやハーブ\n\n## 作り方\n\n1. お肉の水分をしっかり拭き取ります。\n2. たっぷりと下味をつけ、20〜30分ほど室温に置きます。\n3. 商品ページの焼き方ガイドに沿って調理します。\n4. 休ませてからカットし、すぐにお召し上がりください。\n\nシンプルな付け合わせと赤ワインと一緒にどうぞ。`,
-      heroImage: img(`recipe-${r.slug}`),
+      heroImage: recipePhoto(r.category, r.slug),
       category: r.category,
       cookTimeMinutes: r.cookTimeMinutes,
       difficulty: r.difficulty,
