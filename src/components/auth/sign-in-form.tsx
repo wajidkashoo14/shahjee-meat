@@ -27,26 +27,34 @@ export function SignInForm() {
   function handlePasswordSignIn(e: React.FormEvent) {
     e.preventDefault();
     startTransition(async () => {
-      const { error } = await authClient.signIn.email({ email, password });
-      if (error) {
-        toast.error(error.message ?? t("signInError"));
-        return;
+      try {
+        const { error } = await authClient.signIn.email({ email, password });
+        if (error) {
+          toast.error(error.message ?? t("signInError"));
+          return;
+        }
+        await completeSignInAction();
+        router.push(next);
+        router.refresh();
+      } catch {
+        toast.error(t("signInError"));
       }
-      await completeSignInAction();
-      router.push(next);
-      router.refresh();
     });
   }
 
   function handleMagicLink(e: React.FormEvent) {
     e.preventDefault();
     startTransition(async () => {
-      const { error } = await authClient.signIn.magicLink({ email, callbackURL: next });
-      if (error) {
-        toast.error(error.message ?? t("signInError"));
-        return;
+      try {
+        const { error } = await authClient.signIn.magicLink({ email, callbackURL: next });
+        if (error) {
+          toast.error(error.message ?? t("signInError"));
+          return;
+        }
+        setMagicSent(true);
+      } catch {
+        toast.error(t("signInError"));
       }
-      setMagicSent(true);
     });
   }
 

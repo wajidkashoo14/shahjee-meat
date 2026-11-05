@@ -6,6 +6,26 @@ import { db } from "@/db";
 import * as schema from "@/db/schema";
 import { sendEmail } from "@/lib/email";
 
+/**
+ * Resolve the public URL of this deployment. An explicit BETTER_AUTH_URL wins;
+ * otherwise fall back to the URLs Vercel injects at runtime, then localhost.
+ */
+const vercelUrl = (host?: string) => (host ? `https://${host}` : undefined);
+const baseURL =
+  process.env.BETTER_AUTH_URL ||
+  process.env.NEXT_PUBLIC_APP_URL ||
+  vercelUrl(process.env.VERCEL_PROJECT_PRODUCTION_URL) ||
+  vercelUrl(process.env.VERCEL_URL) ||
+  "http://localhost:3000";
+
+const trustedOrigins = [
+  baseURL,
+  process.env.NEXT_PUBLIC_APP_URL,
+  vercelUrl(process.env.VERCEL_PROJECT_PRODUCTION_URL),
+  vercelUrl(process.env.VERCEL_URL),
+  vercelUrl(process.env.VERCEL_BRANCH_URL),
+].filter((o): o is string => !!o);
+
 const hasGoogle = !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
 const hasLine = !!(process.env.LINE_CLIENT_ID && process.env.LINE_CLIENT_SECRET);
 
@@ -20,7 +40,8 @@ export const auth = betterAuth({
     },
   }),
   secret: process.env.BETTER_AUTH_SECRET || "dev-only-insecure-secret-change-me",
-  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+  baseURL,
+  trustedOrigins,
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,

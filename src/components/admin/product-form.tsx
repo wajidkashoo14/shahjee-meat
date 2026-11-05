@@ -208,7 +208,7 @@ export function ProductForm({ initial }: { initial?: Partial<ProductFormValue> &
         </CardContent>
       </Card>
 
-      <div className="flex justify-between">
+      <div className="flex flex-wrap justify-between gap-3">
         {value.id ? (
           <Button variant="outline" onClick={handleDelete} disabled={pending}>
             <Trash2 className="size-4" /> Delete product

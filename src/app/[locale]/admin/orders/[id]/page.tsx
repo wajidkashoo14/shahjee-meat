@@ -22,7 +22,7 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
           <h1 className="font-display text-2xl">{order.orderNumber}</h1>
           <p className="text-sm text-foreground-muted">{order.createdAt.toLocaleString()}</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <OrderStatusSelect orderId={order.id} status={order.status} />
           {order.status === "paid" && <FulfillDialog orderId={order.id} />}
           {order.status !== "refunded" && <RefundDialog orderId={order.id} maxAmount={order.totalJpy - refundedTotal} />}
@@ -39,7 +39,7 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
             <p className="text-sm">{order.shippingName} ({order.shippingNameKana})</p>
             <p className="text-sm text-foreground-muted">{order.shippingPhone}</p>
             <p className="text-sm text-foreground-muted">
-              〒{order.shippingPostalCode} {order.shippingPrefecture}{order.shippingCity} {order.shippingAddressLine1} {order.shippingAddressLine2}
+              〒{order.shippingPostalCode} {order.shippingPrefecture} {order.shippingCity} {order.shippingAddressLine1} {order.shippingAddressLine2}
             </p>
           </CardContent>
         </Card>

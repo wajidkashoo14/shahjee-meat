@@ -26,7 +26,7 @@ export function DashboardShell({
         <div>
           <h1 className="font-display text-2xl">{title}</h1>
         </div>
-        <button onClick={() => setMobileOpen(!mobileOpen)} className="rounded-full border border-border p-2">
+        <button onClick={() => setMobileOpen(!mobileOpen)} className="rounded-full border border-border p-2" aria-label={mobileOpen ? "Close menu" : "Open menu"} aria-expanded={mobileOpen}>
           {mobileOpen ? <X className="size-4" /> : <Menu className="size-4" />}
         </button>
       </div>
