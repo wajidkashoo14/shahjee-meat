@@ -5,7 +5,7 @@ export function ProductRow({ title, items }: { title?: string; items: ProductCar
   return (
     <section>
       {title && <h2 className="font-display text-2xl sm:text-3xl">{title}</h2>}
-      <div className={`grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 xl:grid-cols-4 ${title ? "mt-6" : ""}`}>
+      <div className={`grid grid-cols-2 gap-3 sm:gap-6 sm:grid-cols-3 xl:grid-cols-4 ${title ? "mt-6" : ""}`}>
         {items.map((item) => (
           <ProductCard key={item.product.id} data={item} />
         ))}

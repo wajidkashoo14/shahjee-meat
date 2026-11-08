@@ -36,7 +36,7 @@ export default async function SearchPage({
       {recipes.length > 0 && (
         <div className="mt-12">
           <h2 className="font-display text-2xl">{t("recipes")}</h2>
-          <div className="mt-4 grid grid-cols-2 gap-6 sm:grid-cols-3">
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:gap-6 sm:grid-cols-3">
             {recipes.map((r) => (
               <Link key={r.id} href={`/recipes/${r.slug}`} className="group">
                 <div className="relative aspect-[4/3] overflow-hidden rounded-xl">

@@ -106,7 +106,7 @@ export default async function CollectionPage({
             {items.length === 0 ? (
               <p className="py-24 text-center text-foreground-muted">{t("noProducts")}</p>
             ) : (
-              <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 xl:grid-cols-4">
+              <div className="grid grid-cols-2 gap-3 sm:gap-6 sm:grid-cols-3">
                 {items.map((item) => (
                   <ProductCard key={item.product.id} data={item} />
                 ))}

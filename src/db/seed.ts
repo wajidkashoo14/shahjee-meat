@@ -13,7 +13,7 @@ import * as schema from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { uuidv7, orderNumber } from "@/lib/id";
 import { PREFECTURES } from "@/lib/shipping";
-import { collectionPhoto, productPhoto, recipePhoto } from "./photos";
+import { collectionPhoto, productPhotoAt, recipePhoto } from "./photos";
 
 async function resetDatabase() {
   console.log("Clearing existing data…");
@@ -1038,6 +1038,16 @@ async function seedProducts() {
   const byCategorySlug = new Map(collections.filter((c) => c.kind === "manual").map((c) => [c.slug, c]));
   const ruleCollections = collections.filter((c) => c.kind === "rule" && c.ruleTag);
 
+  // Position of each product within its category (sorted by slug), used to
+  // spread photos so neighbouring tiles differ. Mirrors refresh-images.ts.
+  const ordinals = new Map<string, number>();
+  const counters = new Map<string, number>();
+  for (const p of [...PRODUCTS].sort((a, b) => a.slug.localeCompare(b.slug))) {
+    const n = counters.get(p.category) ?? 0;
+    ordinals.set(p.slug, n);
+    counters.set(p.category, n + 1);
+  }
+
   for (const p of PRODUCTS) {
     const productId = uuidv7();
     await db.insert(schema.products).values({
@@ -1068,7 +1078,7 @@ async function seedProducts() {
       await db.insert(schema.productImages).values({
         id: uuidv7(),
         productId,
-        url: productPhoto(p.category, p.slug, i),
+        url: productPhotoAt(p.category, ordinals.get(p.slug) ?? 0, i),
         alt: p.nameEn,
         sortOrder: i,
       });

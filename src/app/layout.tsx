@@ -1,16 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Fraunces, Noto_Sans_JP } from "next/font/google";
+import { DM_Sans, Geist_Mono, Playfair_Display, Noto_Sans_JP } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import Script from "next/script";
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const dmSans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  axes: ["opsz", "SOFT", "WONK"],
-});
+const playfair = Playfair_Display({ variable: "--font-playfair", subsets: ["latin"] });
 const notoJp = Noto_Sans_JP({
   variable: "--font-noto-jp",
   subsets: ["latin"],
@@ -31,7 +27,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang={locale}
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} ${notoJp.variable} h-full antialiased`}
+      className={`${dmSans.variable} ${geistMono.variable} ${playfair.variable} ${notoJp.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">

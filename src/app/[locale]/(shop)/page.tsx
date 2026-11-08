@@ -37,7 +37,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         />
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/60 to-charcoal/10" />
         <div className="relative mx-auto w-full max-w-7xl px-4 pb-16 sm:px-6">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-brass">{t("heroKicker")}</p>
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-bone/85">{t("heroKicker")}</p>
           <h1 className="max-w-2xl font-display text-5xl leading-[1.05] text-bone sm:text-7xl">{t("heroTitle")}</h1>
           <p className="mt-5 max-w-lg text-bone/80">{t("heroSubtitle")}</p>
           <div className="mt-8 flex flex-wrap gap-3">

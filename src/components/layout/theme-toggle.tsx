@@ -17,7 +17,7 @@ export function ThemeToggle() {
     // there's no pure way to compute this during render.
     const stored = localStorage.getItem("theme") as "light" | "dark" | null;
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setTheme(stored ?? (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"));
+    setTheme(stored ?? "light");
   }, []);
 
   function toggle() {

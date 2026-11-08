@@ -13,6 +13,16 @@ const P = {
   beefBoard: "1666013942642-b7b54ecafd7d",
   rawSlab: "1628543108325-1c27cd7246b3",
   steakPair: "1690983322025-aab4f95a0269",
+  ribeyesRack: "1772285466464-8ccda2c3be92",
+  cutsDark: "1690983325551-b922137727be",
+  cutsLight: "1690983323238-0b91789e1b5a",
+  boneInRibeye: "1788178941299-b206d3f4c4c6",
+  striploinBoard: "1613454320437-0c228c8b1723",
+  ribeyeKnife: "1690983321750-ad6f6d59a84b",
+  ribeyeSalt: "1588347818036-558601350947",
+  sirloinSlices: "1602470521006-59ab77068b0d",
+  steaksGarlic: "1690983330536-3b0089d07cf9",
+  filetPair: "1723893905879-0e309c2a8e06",
   // wagyu / japanese
   wagyuPlatter: "1773902665665-0f3077aa9355",
   wagyuMarbled: "1764994880917-b46601e402ab",
@@ -59,7 +69,11 @@ const COLLECTIONS: Record<string, string> = {
 };
 
 const PRODUCT_POOLS: Record<string, string[]> = {
-  beef: [P.steaksOnPaper, P.ribeyes, P.beefBoard, P.wagyuMarbled, P.filet, P.rawSlab, P.wagyuPlatter],
+  beef: [
+    P.steaksOnPaper, P.ribeyesRack, P.beefBoard, P.boneInRibeye, P.wagyuMarbled, P.striploinBoard,
+    P.cutsDark, P.ribeyeSalt, P.filet, P.ribeyeKnife, P.sirloinSlices, P.ribeyes, P.steaksGarlic,
+    P.cutsLight, P.filetPair, P.wagyuPlatter, P.rawSlab,
+  ],
   "other-meats": [P.lambRack, P.lambRack2, P.lambRack3, P.lambRibs],
   charcuterie: [P.charcBoard, P.salamiSliced, P.salamiRustic, P.cured, P.charcSpread],
   spices: [P.spiceBowls, P.spiceTable, P.spiceFlat, P.spiceSpoons, P.spiceWhite],
@@ -90,6 +104,16 @@ export function collectionPhoto(slug: string) {
 
 export function productPhoto(category: string, slug: string, index = 0) {
   return pick(PRODUCT_POOLS[category] ?? PRODUCT_POOLS.beef, slug, index);
+}
+
+/**
+ * Photo for the Nth product of a category (ordinal = position within its
+ * category). Walking the pool in order keeps neighbouring tiles distinct;
+ * extra gallery images (index > 0) are offset so they differ from the cover.
+ */
+export function productPhotoAt(category: string, ordinal: number, index = 0) {
+  const pool = PRODUCT_POOLS[category] ?? PRODUCT_POOLS.beef;
+  return u(pool[(ordinal + index * 5) % pool.length]);
 }
 
 export function recipePhoto(category: string, slug: string) {

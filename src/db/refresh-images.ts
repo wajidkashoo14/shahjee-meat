@@ -6,7 +6,7 @@
  */
 import { eq } from "drizzle-orm";
 import { db, pool, schema } from "@/db";
-import { collectionPhoto, productPhoto, recipePhoto } from "./photos";
+import { collectionPhoto, productPhotoAt, recipePhoto } from "./photos";
 
 async function main() {
   const collections = await db.select().from(schema.collections);
@@ -17,12 +17,20 @@ async function main() {
   const products = await db.select().from(schema.products);
   const images = await db.select().from(schema.productImages);
   const productById = new Map(products.map((p) => [p.id, p]));
+  // Position of each product within its category (stable: sorted by slug).
+  const ordinal = new Map<string, number>();
+  const counters = new Map<string, number>();
+  for (const p of [...products].sort((a, b) => a.slug.localeCompare(b.slug))) {
+    const n = counters.get(p.category) ?? 0;
+    ordinal.set(p.id, n);
+    counters.set(p.category, n + 1);
+  }
   for (const im of images) {
     const p = productById.get(im.productId);
     if (!p) continue;
     await db
       .update(schema.productImages)
-      .set({ url: productPhoto(p.category, p.slug, im.sortOrder) })
+      .set({ url: productPhotoAt(p.category, ordinal.get(p.id) ?? 0, im.sortOrder) })
       .where(eq(schema.productImages.id, im.id));
   }
 

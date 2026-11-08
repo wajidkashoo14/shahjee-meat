@@ -8,62 +8,58 @@
 
 /*
   Palette: exactly three colors.
-    charcoal  #131110  dark neutral (backgrounds / text)
-    bone      #f3ede3  light neutral (text / backgrounds)
-    ember     #c2410c  the single accent (buttons, links, highlights, alerts)
-  Every other token (surfaces, borders, muted text, success, sale, ...) is a
-  tint/alias of these three, so no extra hues appear anywhere in the UI.
+    cream     #F6F0E6  background (light, default)
+    burgundy  #7A1F2B  the single accent (buttons, prices, links, highlights)
+    ink       #1C1614  text / dark surfaces
+  Every other token is a tint of these three. Dark mode (theme toggle) flips
+  cream and ink and keeps burgundy as the accent.
+  (Legacy token names: charcoal = ink, bone = cream, ember = burgundy.)
 */
 :root {
-  --color-charcoal: #131110;
-  --color-bone: #f3ede3;
-  --color-ember: #c2410c;
-  --color-ember-soft: #ea580c; /* ember, lightened for hover / dark-mode text */
+  --color-charcoal: #1c1614;
+  --color-bone: #f6f0e6;
+  --color-ember: #7a1f2b;
+  --color-ember-soft: #942a38; /* burgundy, slightly lighter, for hover */
 
-  --background: var(--color-charcoal);
-  --surface: #1c1917;
-  --surface-raised: #241f1c;
-  --foreground: var(--color-bone);
-  --foreground-muted: #b8ada0;
-  --border: #34302c;
-  --primary: var(--color-ember);
-  --primary-foreground: var(--color-bone);
-  --accent: var(--color-ember-soft);
-  --sale: var(--color-ember-soft);
-  --success: var(--color-bone);
-  --ring: var(--color-ember-soft);
-}
-
-:root[data-theme="light"] {
   --background: var(--color-bone);
-  --surface: #ffffff;
-  --surface-raised: #ffffff;
+  --surface: #fffcf7;
+  --surface-raised: #efe6d8;
   --foreground: var(--color-charcoal);
-  --foreground-muted: #6b6156;
-  --border: #ddd2c2;
+  --foreground-muted: #6e615a;
+  --border: #e4d8c7;
   --primary: var(--color-ember);
   --primary-foreground: var(--color-bone);
   --accent: var(--color-ember);
   --sale: var(--color-ember);
   --success: var(--color-charcoal);
   --ring: var(--color-ember);
+  --shadow-card: 0 1px 2px rgb(28 22 20 / 0.05), 0 8px 24px -16px rgb(28 22 20 / 0.25);
+  --shadow-card-hover: 0 2px 4px rgb(28 22 20 / 0.06), 0 22px 44px -20px rgb(122 31 43 / 0.45);
 }
 
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    --background: var(--color-bone);
-    --surface: #ffffff;
-    --surface-raised: #ffffff;
-    --foreground: var(--color-charcoal);
-    --foreground-muted: #6b6156;
-    --border: #ddd2c2;
-    --primary: var(--color-ember);
-    --primary-foreground: var(--color-bone);
-    --accent: var(--color-ember);
-    --sale: var(--color-ember);
-    --success: var(--color-charcoal);
-    --ring: var(--color-ember);
-  }
+:root[data-theme="dark"] {
+  --background: var(--color-charcoal);
+  --surface: #241d1a;
+  --surface-raised: #2f2623;
+  --foreground: var(--color-bone);
+  --foreground-muted: #b9ada2;
+  --border: #3b302c;
+  --primary: var(--color-ember);
+  --primary-foreground: var(--color-bone);
+  --accent: #d07583; /* burgundy, lightened for text contrast on ink */
+  --sale: #d07583;
+  --success: var(--color-bone);
+  --ring: #d07583;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-card-hover: 0 22px 44px -20px rgb(0 0 0 / 0.7);
+}
+
+/* Larger small text: client feedback was that type felt too small. */
+@theme {
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.25rem;
+  --text-sm: 0.9375rem;
+  --text-sm--line-height: 1.45rem;
 }
 
 @theme inline {
@@ -87,8 +83,8 @@
   --color-sage: var(--success);
   --color-oxblood: var(--color-ember);
 
-  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
-  --font-sans: var(--font-geist-sans), var(--font-noto-jp), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-playfair), ui-serif, Georgia, serif;
+  --font-sans: var(--font-dm-sans), var(--font-noto-jp), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
   --animate-fade-up: fade-up 0.6s ease-out both;
@@ -110,17 +106,22 @@
 }
 
 html {
-  color-scheme: dark;
-}
-html[data-theme="light"] {
   color-scheme: light;
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  font-feature-settings: "tnum" 1;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+h1, h2, h3, .font-display {
+  letter-spacing: -0.01em;
 }
 
 ::selection {
