@@ -26,27 +26,27 @@ export function MobileNav() {
           <Link
             key={item.href}
             href={item.href}
-            className={cn("flex flex-col items-center gap-0.5 px-3 py-1 text-[11px]", active ? "text-primary" : "text-foreground-muted")}
+            className={cn("flex flex-col items-center gap-0.5 px-3 py-1 text-xs font-medium", active ? "font-semibold text-foreground" : "text-foreground-muted")}
           >
             <item.icon className="size-5" />
             {item.label}
           </Link>
         );
       })}
-      <button onClick={() => setSearchOpen(true)} className="flex flex-col items-center gap-0.5 px-3 py-1 text-[11px] text-foreground-muted">
+      <button onClick={() => setSearchOpen(true)} className="flex flex-col items-center gap-0.5 px-3 py-1 text-xs font-medium text-foreground-muted">
         <Search className="size-5" />
         {t("search")}
       </button>
-      <button onClick={() => setCartOpen(true)} className="relative flex flex-col items-center gap-0.5 px-3 py-1 text-[11px] text-foreground-muted">
+      <button onClick={() => setCartOpen(true)} className="relative flex flex-col items-center gap-0.5 px-3 py-1 text-xs font-medium text-foreground-muted">
         <ShoppingBag className="size-5" />
         {t("cart")}
         {itemCount > 0 && (
-          <span className="absolute right-1 top-0 flex size-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-primary-foreground">
+          <span className="absolute right-1 top-0 flex size-4 items-center justify-center rounded-full bg-foreground text-[9px] font-bold text-background">
             {itemCount > 9 ? "9+" : itemCount}
           </span>
         )}
       </button>
-      <Link href="/account" className={cn("flex flex-col items-center gap-0.5 px-3 py-1 text-[11px]", pathname === "/account" ? "text-primary" : "text-foreground-muted")}>
+      <Link href="/account" className={cn("flex flex-col items-center gap-0.5 px-3 py-1 text-xs font-medium", pathname === "/account" ? "font-semibold text-foreground" : "text-foreground-muted")}>
         <User className="size-5" />
         {t("account")}
       </Link>

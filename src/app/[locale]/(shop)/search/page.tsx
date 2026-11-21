@@ -42,7 +42,7 @@ export default async function SearchPage({
                 <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
                   <Image src={r.heroImage} alt={r.titleEn} fill sizes="33vw" className="object-cover" />
                 </div>
-                <p className="mt-2 text-sm font-medium group-hover:text-primary">{locale === "ja" ? r.titleJa : r.titleEn}</p>
+                <p className="mt-2 text-sm font-medium underline-offset-4 group-hover:underline">{locale === "ja" ? r.titleJa : r.titleEn}</p>
               </Link>
             ))}
           </div>

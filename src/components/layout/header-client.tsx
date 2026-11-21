@@ -34,7 +34,7 @@ export function HeaderClient({ isSignedIn, role }: { isSignedIn: boolean; role?:
           <button className="xl:hidden p-2 -ml-2" onClick={() => setMobileOpen(true)} aria-label="Open menu">
             <Menu className="size-5" />
           </button>
-          <Link href="/" className="whitespace-nowrap font-display text-xl font-semibold tracking-tight max-[360px]:text-lg">
+          <Link href="/" className="whitespace-nowrap font-display text-[1.375rem] tracking-tight max-[360px]:text-lg">
             Whole Cuts
           </Link>
         </div>
@@ -82,7 +82,7 @@ export function HeaderClient({ isSignedIn, role }: { isSignedIn: boolean; role?:
           <Button variant="ghost" size="icon" aria-label="Cart" className="relative hidden sm:inline-flex" onClick={() => setCartOpen(true)}>
             <ShoppingBag className="size-4" />
             {itemCount > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+              <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-foreground text-[10px] font-bold text-background">
                 {itemCount > 9 ? "9+" : itemCount}
               </span>
             )}

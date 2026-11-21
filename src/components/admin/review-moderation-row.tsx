@@ -33,7 +33,7 @@ export function ReviewModerationRow({
             <StarRating rating={review.rating} />
             <p className="mt-1 text-sm font-medium">{review.productName}</p>
           </div>
-          <Badge variant={review.status === "approved" ? "new" : review.status === "hidden" ? "outline" : "sale"}>{review.status}</Badge>
+          <Badge variant={review.status === "approved" ? "success" : review.status === "hidden" ? "outline" : "warning"}>{review.status}</Badge>
         </div>
         {review.title && <p className="mt-2 font-medium">{review.title}</p>}
         <p className="mt-1 text-sm text-foreground-muted">{review.body}</p>

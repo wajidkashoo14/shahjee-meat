@@ -26,7 +26,7 @@ export function ForgotPasswordForm() {
     });
   }
 
-  if (sent) return <p className="rounded-xl border border-border bg-surface p-4 text-sm text-success">{t("resetLinkSent", { email })}</p>;
+  if (sent) return <p className="rounded-xl border border-success/25 bg-success-soft p-4 text-sm text-success-soft-foreground">{t("resetLinkSent", { email })}</p>;
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">

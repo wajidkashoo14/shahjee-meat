@@ -43,7 +43,7 @@ export function SubscriptionCard({ sub }: { sub: Sub }) {
             <p className="text-sm text-foreground-muted">{t("everyNWeeks", { n: sub.frequencyWeeks })}</p>
           </div>
           <span
-            className={`rounded-full px-3 py-1 text-xs font-semibold ${sub.status === "active" ? "bg-foreground/10 text-foreground" : sub.status === "paused" ? "bg-primary/20 text-accent" : "bg-foreground-muted/20 text-foreground-muted"}`}
+            className={`rounded-full px-3 py-1 text-xs font-semibold ${sub.status === "active" ? "bg-success-soft text-success-soft-foreground" : sub.status === "paused" ? "bg-warning-soft text-warning-soft-foreground" : "bg-surface-raised text-foreground-muted"}`}
           >
             {t(sub.status as "active" | "paused" | "cancelled")}
           </span>

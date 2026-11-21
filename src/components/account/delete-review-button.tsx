@@ -18,7 +18,7 @@ export function DeleteReviewButton({ reviewId }: { reviewId: string }) {
       disabled={pending}
       onClick={() => startTransition(async () => { await deleteMyReviewAction(reviewId); router.refresh(); })}
     >
-      <Trash2 className="size-4 text-sale" /> {t("delete")}
+      <Trash2 className="size-4 text-danger" /> {t("delete")}
     </Button>
   );
 }

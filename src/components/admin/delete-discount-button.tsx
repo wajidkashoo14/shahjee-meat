@@ -23,7 +23,7 @@ export function DeleteDiscountButton({ id }: { id: string }) {
         });
       }}
     >
-      <Trash2 className="size-4 text-sale" />
+      <Trash2 className="size-4 text-danger" />
     </Button>
   );
 }

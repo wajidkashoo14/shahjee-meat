@@ -70,7 +70,7 @@ export default async function RecipeDetailPage({ params }: { params: Promise<{ l
                   <div className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-surface-raised">
                     {p.images[0] && <Image src={p.images[0].url} alt={p.nameEn} fill sizes="48px" className="object-cover" />}
                   </div>
-                  <Link href={`/products/${p.slug}`} className="flex-1 text-sm font-medium hover:text-primary">
+                  <Link href={`/products/${p.slug}`} className="flex-1 text-sm font-medium underline-offset-4 hover:underline">
                     {locale === "ja" ? p.nameJa : p.nameEn}
                   </Link>
                   {cheapest && <span className="text-sm text-foreground-muted tabular-nums">{formatJpy(cheapest.priceJpy)}</span>}

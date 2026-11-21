@@ -51,7 +51,7 @@ export function FilterPanel({ facets, onNavigate }: { facets: Facets; onNavigate
       <div className="flex items-center justify-between">
         <h3 className="font-display text-lg">{t("filters")}</h3>
         {!!hasAny && (
-          <button onClick={clearAll} className="text-xs text-primary hover:underline">
+          <button onClick={clearAll} className="text-xs font-semibold text-foreground underline decoration-foreground/30 underline-offset-4 hover:decoration-foreground">
             {t("clearFilters")}
           </button>
         )}

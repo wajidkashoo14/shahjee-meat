@@ -218,7 +218,7 @@ export function CheckoutForm({
               </Button>
             </div>
           )}
-          {orderError && <p className="mt-2 text-sm text-sale">{orderError}</p>}
+          {orderError && <p className="mt-2 text-sm text-danger">{orderError}</p>}
         </Section>
       </div>
 

@@ -33,7 +33,7 @@ export function WishlistGrid({ items }: { items: Item[] }) {
               {product.images[0] && <Image src={product.images[0].url} alt={product.nameEn} fill sizes="200px" className="object-cover" />}
             </Link>
             <div className="p-3">
-              <Link href={`/products/${product.slug}`} className="text-sm font-medium hover:text-primary">
+              <Link href={`/products/${product.slug}`} className="text-sm font-medium underline-offset-4 hover:underline">
                 {locale === "ja" ? product.nameJa : product.nameEn}
               </Link>
               {variant && <p className="mt-1 text-sm font-semibold tabular-nums">{formatJpy(variant.priceJpy)}</p>}
@@ -42,7 +42,7 @@ export function WishlistGrid({ items }: { items: Item[] }) {
                 <button
                   disabled={pending}
                   onClick={() => startTransition(async () => { await removeWishlistItemAction(wishlistId); router.refresh(); })}
-                  className="rounded-full border border-border p-2 text-foreground-muted hover:text-sale"
+                  className="rounded-full border border-border p-2 text-foreground-muted hover:text-danger"
                   aria-label={t("remove")}
                 >
                   <Trash2 className="size-4" />

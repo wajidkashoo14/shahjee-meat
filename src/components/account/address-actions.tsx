@@ -29,7 +29,7 @@ export function AddressActions({ addressId, isDefault }: { addressId: string; is
         disabled={pending}
         onClick={() => startTransition(async () => { await deleteAddressAction(addressId); router.refresh(); })}
       >
-        <Trash2 className="size-4 text-sale" />
+        <Trash2 className="size-4 text-danger" />
       </Button>
     </div>
   );

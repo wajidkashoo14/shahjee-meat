@@ -50,7 +50,7 @@ export default async function RewardsPage() {
                   <span className="capitalize text-foreground-muted">
                     {entry.reason} · {entry.createdAt.toLocaleDateString(locale === "ja" ? "ja-JP" : "en-US")}
                   </span>
-                  <span className={entry.points > 0 ? "text-success" : "text-sale"}>
+                  <span className={entry.points > 0 ? "text-success" : "text-danger"}>
                     {entry.points > 0 ? "+" : ""}
                     {entry.points} pt
                   </span>

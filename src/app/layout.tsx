@@ -1,16 +1,28 @@
 import type { Metadata } from "next";
-import { DM_Sans, Geist_Mono, Playfair_Display, Noto_Sans_JP } from "next/font/google";
+import { Fraunces, Geist_Mono, Manrope, Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import Script from "next/script";
 import "./globals.css";
 
-const dmSans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin"] });
+// Typography (see DESIGN_SYSTEM.md):
+//   Fraunces: display serif for headings, product names and the wordmark.
+//     It's variable, and the optical-size axis keeps big headlines refined and
+//     small titles sturdy.
+//   Manrope: body and UI text, prices, tables, dashboards.
+//   Noto Serif JP / Noto Sans JP: Japanese glyphs for the same two roles.
+//     They aren't preloaded; browsers fetch only the slices a page uses.
+const fraunces = Fraunces({ variable: "--font-fraunces", subsets: ["latin"], axes: ["opsz"] });
+const manrope = Manrope({ variable: "--font-manrope", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
-const playfair = Playfair_Display({ variable: "--font-playfair", subsets: ["latin"] });
-const notoJp = Noto_Sans_JP({
-  variable: "--font-noto-jp",
-  subsets: ["latin"],
+const notoSansJp = Noto_Sans_JP({
+  variable: "--font-noto-sans-jp",
   weight: ["400", "500", "600", "700"],
+  preload: false,
+});
+const notoSerifJp = Noto_Serif_JP({
+  variable: "--font-noto-serif-jp",
+  weight: ["600"],
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -27,7 +39,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang={locale}
-      className={`${dmSans.variable} ${geistMono.variable} ${playfair.variable} ${notoJp.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${manrope.variable} ${geistMono.variable} ${notoSansJp.variable} ${notoSerifJp.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">

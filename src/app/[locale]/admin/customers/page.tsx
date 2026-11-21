@@ -25,13 +25,13 @@ export default async function AdminCustomersPage() {
             <TableCell className="font-medium">{c.name}</TableCell>
             <TableCell className="text-foreground-muted">{c.email}</TableCell>
             <TableCell>
-              <Badge variant={c.role === "admin" ? "premium" : c.role === "staff" ? "new" : "outline"}>{c.role}</Badge>
-              {c.banned && <Badge variant="sale" className="ml-1">banned</Badge>}
+              <Badge variant={c.role === "admin" ? "new" : c.role === "staff" ? "default" : "outline"}>{c.role}</Badge>
+              {c.banned && <Badge variant="danger" className="ml-1">banned</Badge>}
             </TableCell>
             <TableCell>{c.pointsBalance}</TableCell>
             <TableCell className="text-foreground-muted">{c.createdAt.toLocaleDateString()}</TableCell>
             <TableCell>
-              <Button variant="ghost" size="sm" asChild>
+              <Button variant="link" size="sm" asChild>
                 <Link href={`/admin/customers/${c.id}`}>View</Link>
               </Button>
             </TableCell>

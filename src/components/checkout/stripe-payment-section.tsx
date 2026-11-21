@@ -32,7 +32,7 @@ export function StripePaymentSection({
     });
   }, []);
 
-  if (error) return <p className="text-sm text-sale">{error}</p>;
+  if (error) return <p className="text-sm text-danger">{error}</p>;
   if (!clientSecret || !stripePromise) {
     return (
       <div className="flex items-center gap-2 text-sm text-foreground-muted">
@@ -79,7 +79,7 @@ function StripeInner({ amount, onPaid, disabled }: { amount: number; onPaid: (id
   return (
     <div className="flex flex-col gap-4">
       <PaymentElement />
-      {error && <p className="text-sm text-sale">{error}</p>}
+      {error && <p className="text-sm text-danger">{error}</p>}
       <Button size="lg" onClick={handlePay} disabled={disabled || submitting || !stripe}>
         {submitting ? <Loader2 className="size-4 animate-spin" /> : null}
         {t("payAmount", { amount: formatJpy(amount) })}

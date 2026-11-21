@@ -28,7 +28,7 @@ export function ContactForm() {
     });
   }
 
-  if (sent) return <p className="rounded-xl border border-border bg-surface p-6 text-success">{t("sent")}</p>;
+  if (sent) return <p className="rounded-xl border border-success/25 bg-success-soft p-6 text-success-soft-foreground">{t("sent")}</p>;
 
   return (
     <form onSubmit={submit} className="flex flex-col gap-4">

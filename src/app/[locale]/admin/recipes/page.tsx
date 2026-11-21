@@ -32,9 +32,9 @@ export default async function AdminRecipesPage() {
               </TableCell>
               <TableCell className="capitalize">{r.category}</TableCell>
               <TableCell className="capitalize">{r.difficulty}</TableCell>
-              <TableCell><Badge variant={r.status === "published" ? "new" : "outline"}>{r.status}</Badge></TableCell>
+              <TableCell><Badge variant={r.status === "published" ? "success" : "outline"}>{r.status}</Badge></TableCell>
               <TableCell>
-                <Button variant="ghost" size="sm" asChild><Link href={`/admin/recipes/${r.id}`}>Edit</Link></Button>
+                <Button variant="link" size="sm" asChild><Link href={`/admin/recipes/${r.id}`}>Edit</Link></Button>
               </TableCell>
             </TableRow>
           ))}

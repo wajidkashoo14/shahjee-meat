@@ -42,12 +42,12 @@ export default async function AdminProductsPage() {
                 </TableCell>
                 <TableCell className="capitalize">{p.category}</TableCell>
                 <TableCell className="tabular-nums">{formatJpy(minPrice)}</TableCell>
-                <TableCell className={totalStock === 0 ? "text-sale" : totalStock < 10 ? "text-brass" : ""}>{totalStock}</TableCell>
+                <TableCell className={totalStock === 0 ? "font-semibold text-danger" : totalStock < 10 ? "font-semibold text-warning" : ""}>{totalStock}</TableCell>
                 <TableCell>
-                  <Badge variant={p.status === "published" ? "new" : "outline"}>{p.status}</Badge>
+                  <Badge variant={p.status === "published" ? "success" : "outline"}>{p.status}</Badge>
                 </TableCell>
                 <TableCell>
-                  <Button variant="ghost" size="sm" asChild>
+                  <Button variant="link" size="sm" asChild>
                     <Link href={`/admin/products/${p.id}`}>Edit</Link>
                   </Button>
                 </TableCell>

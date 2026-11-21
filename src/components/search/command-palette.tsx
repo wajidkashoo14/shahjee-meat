@@ -58,9 +58,9 @@ export function CommandPalette() {
   return (
     <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm" />
+        <DialogPrimitive.Overlay className="fixed inset-0 z-[60] bg-scrim/70 backdrop-blur-sm" />
         <DialogPrimitive.Content
-          className="fixed left-1/2 top-24 z-[60] w-[92vw] max-w-xl -translate-x-1/2 rounded-2xl border border-border bg-surface shadow-2xl"
+          className="fixed left-1/2 top-24 z-[60] w-[92vw] max-w-xl -translate-x-1/2 rounded-2xl border border-border bg-surface shadow-[var(--shadow-overlay)]"
           onOpenAutoFocus={(e) => {
             e.preventDefault();
             inputRef.current?.focus();

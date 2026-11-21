@@ -14,7 +14,7 @@ export function SheetOverlay({ className, ...props }: React.ComponentPropsWithou
   return (
     <DialogPrimitive.Overlay
       className={cn(
-        "fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity duration-300 data-[state=closed]:opacity-0 data-[state=open]:opacity-100",
+        "fixed inset-0 z-50 bg-scrim/60 backdrop-blur-sm transition-opacity duration-300 data-[state=closed]:opacity-0 data-[state=open]:opacity-100",
         className,
       )}
       {...props}
@@ -23,7 +23,7 @@ export function SheetOverlay({ className, ...props }: React.ComponentPropsWithou
 }
 
 const sheetVariants = cva(
-  "fixed z-50 flex flex-col gap-4 bg-surface border-border shadow-xl transition-transform duration-300 ease-in-out",
+  "fixed z-50 flex flex-col gap-4 bg-surface border-border shadow-[var(--shadow-overlay)] transition-transform duration-300 ease-in-out",
   {
     variants: {
       side: {

@@ -38,7 +38,7 @@ export default async function AdminCustomerDetailPage({ params }: { params: Prom
           <ul className="flex flex-col divide-y divide-border">
             {orders.map((o) => (
               <li key={o.id} className="flex items-center justify-between py-3 text-sm">
-                <Link href={`/admin/orders/${o.id}`} className="hover:text-primary">{o.orderNumber}</Link>
+                <Link href={`/admin/orders/${o.id}`} className="underline-offset-4 hover:underline">{o.orderNumber}</Link>
                 <span className="text-foreground-muted">{o.createdAt.toLocaleDateString()}</span>
                 <OrderStatusBadge status={o.status} />
                 <span className="tabular-nums">{formatJpy(o.totalJpy)}</span>

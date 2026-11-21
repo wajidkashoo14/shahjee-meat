@@ -19,7 +19,7 @@ export function DropdownMenuContent({
       <DropdownMenuPrimitive.Content
         sideOffset={sideOffset}
         className={cn(
-          "z-50 min-w-[10rem] overflow-hidden rounded-xl border border-border bg-surface-raised p-1 shadow-lg",
+          "z-50 min-w-[10rem] overflow-hidden rounded-xl border border-border bg-surface p-1 text-foreground shadow-[var(--shadow-overlay)]",
           className,
         )}
         {...props}
@@ -35,7 +35,7 @@ export function DropdownMenuItem({
   return (
     <DropdownMenuPrimitive.Item
       className={cn(
-        "flex cursor-pointer select-none items-center gap-2 rounded-lg px-3 py-2 text-sm outline-none data-[highlighted]:bg-primary data-[highlighted]:text-primary-foreground",
+        "flex cursor-pointer select-none items-center gap-2 rounded-lg px-3 py-2 text-sm outline-none data-[highlighted]:bg-surface-raised data-[highlighted]:text-foreground",
         className,
       )}
       {...props}
@@ -51,7 +51,7 @@ export function DropdownMenuRadioItem({
   return (
     <DropdownMenuPrimitive.RadioItem
       className={cn(
-        "relative flex cursor-pointer select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm outline-none data-[highlighted]:bg-primary data-[highlighted]:text-primary-foreground",
+        "relative flex cursor-pointer select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm outline-none data-[highlighted]:bg-surface-raised data-[highlighted]:text-foreground",
         className,
       )}
       {...props}

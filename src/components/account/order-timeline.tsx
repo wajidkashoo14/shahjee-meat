@@ -19,14 +19,14 @@ export function OrderTimeline({ status }: { status: string }) {
             <div
               className={cn(
                 "flex size-8 items-center justify-center rounded-full border-2 text-xs font-semibold",
-                i <= currentIndex ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground-muted",
+                i <= currentIndex ? "border-foreground bg-foreground text-background" : "border-border text-foreground-muted",
               )}
             >
               {i < currentIndex ? <Check className="size-4" /> : i + 1}
             </div>
             <span className={cn("text-xs", i <= currentIndex ? "text-foreground" : "text-foreground-muted")}>{t(step as never)}</span>
           </div>
-          {i < STEPS.length - 1 && <div className={cn("mx-2 h-0.5 flex-1", i < currentIndex ? "bg-primary" : "bg-border")} />}
+          {i < STEPS.length - 1 && <div className={cn("mx-2 h-0.5 flex-1", i < currentIndex ? "bg-foreground" : "bg-border")} />}
         </div>
       ))}
     </div>

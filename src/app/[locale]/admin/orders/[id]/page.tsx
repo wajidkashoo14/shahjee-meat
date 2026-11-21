@@ -57,7 +57,7 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
             <p className="mb-2 font-medium">Payment</p>
             <p className="text-sm capitalize text-foreground-muted">{order.paymentMethod}</p>
             {order.refunds.length > 0 && (
-              <p className="mt-2 text-sm text-sale">Refunded: {formatJpy(refundedTotal)}</p>
+              <p className="mt-2 text-sm font-semibold text-danger">Refunded: {formatJpy(refundedTotal)}</p>
             )}
           </CardContent>
         </Card>

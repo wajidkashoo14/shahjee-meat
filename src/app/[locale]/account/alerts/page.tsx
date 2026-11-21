@@ -33,7 +33,7 @@ export default async function AlertsPage() {
             </div>
             <div className="flex-1">
               {alert.product && (
-                <Link href={`/products/${alert.product.slug}`} className="text-sm font-medium hover:text-primary">
+                <Link href={`/products/${alert.product.slug}`} className="text-sm font-medium underline-offset-4 hover:underline">
                   {locale === "ja" ? alert.product.nameJa : alert.product.nameEn}
                 </Link>
               )}

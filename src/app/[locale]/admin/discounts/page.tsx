@@ -31,7 +31,7 @@ export default async function AdminDiscountsPage() {
               <TableCell>{d.kind === "percent" ? `${d.value}%` : d.kind === "fixed" ? formatJpy(d.value) : "—"}</TableCell>
               <TableCell>{formatJpy(d.minSpendJpy)}</TableCell>
               <TableCell>{d.timesUsed}{d.usageLimit ? ` / ${d.usageLimit}` : ""}</TableCell>
-              <TableCell><Badge variant={d.active ? "new" : "outline"}>{d.active ? "Active" : "Inactive"}</Badge></TableCell>
+              <TableCell><Badge variant={d.active ? "success" : "outline"}>{d.active ? "Active" : "Inactive"}</Badge></TableCell>
               <TableCell className="flex gap-2">
                 <DiscountFormDialog discount={d} />
                 <DeleteDiscountButton id={d.id} />

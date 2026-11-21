@@ -52,7 +52,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
       {order.trackingNumber && (
         <Card>
           <CardContent className="flex items-center gap-3 pt-6">
-            <Truck className="size-5 text-primary" />
+            <Truck className="size-5 text-foreground" />
             <div>
               <p className="text-sm font-medium">
                 {t("carrier")}: {order.carrier === "yamato" ? "Yamato Transport" : "Sagawa Express"}

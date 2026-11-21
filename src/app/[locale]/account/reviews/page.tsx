@@ -30,7 +30,7 @@ export default async function MyReviewsPage() {
               <div>
                 <StarRating rating={review.rating} />
                 {review.product && (
-                  <Link href={`/products/${review.product.slug}`} className="mt-1 block text-sm font-medium hover:text-primary">
+                  <Link href={`/products/${review.product.slug}`} className="mt-1 block text-sm font-medium underline-offset-4 hover:underline">
                     {locale === "ja" ? review.product.nameJa : review.product.nameEn}
                   </Link>
                 )}

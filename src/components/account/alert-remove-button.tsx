@@ -14,7 +14,7 @@ export function AlertRemoveButton({ alertId }: { alertId: string }) {
     <button
       disabled={pending}
       onClick={() => startTransition(async () => { await removeStockAlertAction(alertId); router.refresh(); })}
-      className="rounded-full border border-border p-2 text-foreground-muted hover:text-sale"
+      className="rounded-full border border-border p-2 text-foreground-muted hover:text-danger"
       aria-label={t("remove")}
     >
       <Trash2 className="size-4" />

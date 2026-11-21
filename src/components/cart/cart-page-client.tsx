@@ -77,7 +77,7 @@ export function CartPageClient({ initialSummary }: { initialSummary: CartSummary
       <div className="flex flex-col gap-6">
         <div className="h-2 w-full overflow-hidden rounded-full bg-surface-raised">
           <div
-            className="h-full bg-primary transition-all"
+            className="h-full bg-foreground transition-all"
             style={{ width: `${Math.min(100, (summary.pricing.subtotalJpy / FREE_SHIPPING_THRESHOLD_JPY) * 100)}%` }}
           />
         </div>
@@ -97,7 +97,7 @@ export function CartPageClient({ initialSummary }: { initialSummary: CartSummary
                     <p className="font-medium">{locale === "ja" ? item.nameJa : item.nameEn}</p>
                     <p className="text-sm text-foreground-muted">{locale === "ja" ? item.labelJa : item.labelEn}</p>
                   </div>
-                  <button onClick={() => remove(item.id)} className="text-foreground-muted hover:text-sale" aria-label="Remove">
+                  <button onClick={() => remove(item.id)} className="text-foreground-muted hover:text-danger" aria-label="Remove">
                     <Trash2 className="size-4" />
                   </button>
                 </div>
@@ -125,7 +125,7 @@ export function CartPageClient({ initialSummary }: { initialSummary: CartSummary
         <Card>
           <CardContent className="flex flex-col gap-4 pt-6">
             <p className="flex items-center gap-2 font-medium">
-              <Truck className="size-4 text-primary" /> {t("deliveryDetails")}
+              <Truck className="size-4 text-foreground" /> {t("deliveryDetails")}
             </p>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <Select value={date} onValueChange={(v) => saveDelivery(v, slot)}>

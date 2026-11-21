@@ -25,7 +25,7 @@ export default async function AdminInventoryPage() {
             <TableCell>{v.product.nameEn}</TableCell>
             <TableCell className="text-foreground-muted">{v.labelEn}</TableCell>
             <TableCell className="text-xs text-foreground-muted">{v.sku}</TableCell>
-            <TableCell className={v.stock === 0 ? "text-sale font-medium" : v.stock < 5 ? "text-brass font-medium" : ""}>{v.stock}</TableCell>
+            <TableCell className={v.stock === 0 ? "font-semibold text-danger" : v.stock < 5 ? "font-semibold text-warning" : ""}>{v.stock}</TableCell>
             <TableCell>
               <InventoryAdjustDialog variantId={v.id} label={`${v.product.nameEn} — ${v.labelEn}`} />
             </TableCell>

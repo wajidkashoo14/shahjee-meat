@@ -53,7 +53,7 @@ export function DangerZone() {
       <Separator />
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="font-medium text-sale">{t("deleteAccount")}</p>
+          <p className="font-semibold text-danger">{t("deleteAccount")}</p>
           <p className="text-sm text-foreground-muted">{t("deleteAccountDesc")}</p>
         </div>
         <Button variant="destructive" onClick={handleDelete} disabled={pending}>

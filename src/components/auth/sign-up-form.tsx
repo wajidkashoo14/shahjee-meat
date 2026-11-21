@@ -58,7 +58,7 @@ export function SignUpForm() {
       </Button>
       <p className="text-center text-sm text-foreground-muted">
         {t("haveAccount")}{" "}
-        <Link href="/sign-in" className="text-primary hover:underline">
+        <Link href="/sign-in" className="font-semibold text-foreground underline decoration-foreground/30 underline-offset-4 hover:decoration-foreground">
           {t("signIn")}
         </Link>
       </p>

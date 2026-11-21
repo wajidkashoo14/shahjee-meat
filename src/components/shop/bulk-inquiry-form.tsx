@@ -29,7 +29,7 @@ export function BulkInquiryForm({ productId, productName }: { productId: string;
   }
 
   if (sent) {
-    return <p className="rounded-xl border border-border p-4 text-sm text-success">{t("inquirySent")}</p>;
+    return <p className="rounded-xl border border-success/25 bg-success-soft p-4 text-sm text-success-soft-foreground">{t("inquirySent")}</p>;
   }
 
   return (

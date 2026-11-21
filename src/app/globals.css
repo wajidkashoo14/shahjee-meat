@@ -1,61 +1,171 @@
 @import "tailwindcss";
 
 /*
-  Design concept: "modern butcher × editorial magazine".
-  Dark-first theme; light theme is a full flip, not an afterthought.
-  Tokens follow BUILD_PROMPT.md §6.
+  WHOLE CUTS DESIGN SYSTEM — "Ink & Pasture"
+  Rationale, the directions that were evaluated, and usage rules: DESIGN_SYSTEM.md
+
+  Two plus one: two base colors that get along (parchment and ink) and one
+  that doesn't (pasture green), and the green goes on main buttons only.
+  Red for sale prices and errors, and the order/stock status colors, are
+  signals, not palette colors.
+
+  Three layers:
+    1. Brand palette   --stone-*, --pasture-*, --brick-*  (raw values;
+                       components never use these directly)
+    2. Semantic tokens --background, --primary, --danger, ...       (light is the
+                       default; [data-theme="dark"] overrides them)
+    3. Tailwind map    @theme inline — the ONLY colors that exist as utilities.
+                       Tailwind's default palette is switched off below, so an
+                       off-system color (bg-red-500, text-gray-600 …) can't be used.
 */
 
-/*
-  Palette: exactly three colors.
-    cream     #F6F0E6  background (light, default)
-    burgundy  #7A1F2B  the single accent (buttons, prices, links, highlights)
-    ink       #1C1614  text / dark surfaces
-  Every other token is a tint of these three. Dark mode (theme toggle) flips
-  cream and ink and keeps burgundy as the accent.
-  (Legacy token names: charcoal = ink, bone = cream, ember = burgundy.)
-*/
 :root {
-  --color-charcoal: #1c1614;
-  --color-bone: #f6f0e6;
-  --color-ember: #7a1f2b;
-  --color-ember-soft: #942a38; /* burgundy, slightly lighter, for hover */
+  /* ── 1. Brand palette ──────────────────────────────────────────────── */
+  /* Base: parchment … */
+  --stone-0: #fffefb;   /* cards, inputs, popovers */
+  --stone-50: #f7f4ee;  /* page canvas — parchment */
+  --stone-100: #efeae1; /* muted fills, table headers, highlighted items */
+  --stone-200: #e3dcd0; /* hairline borders */
+  --stone-400: #958b7c; /* form-control borders (3:1 against the canvas) */
+  --stone-600: #5f584e; /* secondary text */
+  /* … and ink */
+  --stone-800: #2e2b27; /* raised ink: active item on ink surfaces */
+  --stone-900: #1c1b18; /* ink: text, footer, dashboard sidebar */
 
-  --background: var(--color-bone);
-  --surface: #fffcf7;
-  --surface-raised: #efe6d8;
-  --foreground: var(--color-charcoal);
-  --foreground-muted: #6e615a;
-  --border: #e4d8c7;
-  --primary: var(--color-ember);
-  --primary-foreground: var(--color-bone);
-  --accent: var(--color-ember);
-  --sale: var(--color-ember);
-  --success: var(--color-charcoal);
-  --ring: var(--color-ember);
-  --shadow-card: 0 1px 2px rgb(28 22 20 / 0.05), 0 8px 24px -16px rgb(28 22 20 / 0.25);
-  --shadow-card-hover: 0 2px 4px rgb(28 22 20 / 0.06), 0 22px 44px -20px rgb(122 31 43 / 0.45);
+  /* Pop: pasture green, main buttons only. Green is red meat's complement,
+     so the button stands apart from the product photos instead of blending in. */
+  --pasture-600: #0f7a39;
+  --pasture-700: #046a2f; /* hover */
+
+  /* Signal red: sale prices and errors only */
+  --brick-600: #a3392a;
+  --brick-700: #8c2f22;
+  --brick-50: #fbeeeb;
+
+  /* ── 2. Semantic tokens (light, default) ───────────────────────────── */
+  --background: var(--stone-50);
+  --surface: var(--stone-0);
+  --surface-raised: var(--stone-100);
+  --foreground: var(--stone-900);
+  --foreground-muted: var(--stone-600);
+  --border: var(--stone-200);
+  --input: var(--stone-400);
+
+  /* The pop color. Main buttons only: links, tabs, toggles, selected items,
+     badges and icons are ink. */
+  --primary: var(--pasture-600);
+  --primary-hover: var(--pasture-700);
+  --primary-foreground: #ffffff;
+
+  /* Ink surfaces: footer, dashboard sidebar */
+  --surface-inverse: var(--stone-900);
+  --surface-inverse-raised: var(--stone-800);
+  --foreground-inverse: #f3eee4;
+  --foreground-inverse-muted: #b5aea2;
+  --border-inverse: #3a3631;
+
+  /* Commerce + status. Red is reserved for sale prices and errors. */
+  --sale: var(--brick-600);
+  --sale-foreground: #ffffff;
+  /* Each status: solid color (text / fills), -foreground (text on the solid),
+     -soft (tinted background), -soft-foreground (text on the tint). */
+  --danger: var(--brick-600);
+  --danger-foreground: #ffffff;
+  --danger-soft: var(--brick-50);
+  --danger-soft-foreground: var(--brick-700);
+  --success: #2f7a4c;
+  --success-foreground: #ffffff;
+  --success-soft: #e9f3ec;
+  --success-soft-foreground: #1e5734;
+  --warning: #a2600f;
+  --warning-foreground: #ffffff;
+  --warning-soft: #fbf1de;
+  --warning-soft-foreground: #7a480d;
+  --info: #3d6a89;
+  --info-foreground: #ffffff;
+  --info-soft: #e8eff4;
+  --info-soft-foreground: #2b5068;
+
+  /* Ink in light mode, ivory in dark mode. */
+  --ring: var(--foreground);
+
+  /* Photo overlays stay warm-neutral in both themes: a green cast makes meat
+     look grey and unappetising. */
+  --scrim: #14110e;
+  --on-scrim: #faf6ee;
+
+  /* Data visualisation: categorical slots in fixed order (green, ochre, slate,
+     clay, plum). Validated for color-vision deficiency, lightness band, chroma
+     and contrast against --surface in each mode. Single-series charts use
+     --chart-1. Never reuse status colors as series colors. */
+  --chart-1: #0e6c43;
+  --chart-2: #b48226;
+  --chart-3: #4273b0;
+  --chart-4: #be5737;
+  --chart-5: #89497c;
+  --chart-grid: var(--stone-200);
+
+  --shadow-card: 0 1px 2px rgb(28 27 24 / 0.05), 0 8px 24px -16px rgb(28 27 24 / 0.22);
+  --shadow-card-hover: 0 2px 4px rgb(28 27 24 / 0.06), 0 24px 44px -22px rgb(28 27 24 / 0.34);
+  --shadow-overlay: 0 24px 60px -20px rgb(20 17 14 / 0.35);
 }
 
 :root[data-theme="dark"] {
-  --background: var(--color-charcoal);
-  --surface: #241d1a;
-  --surface-raised: #2f2623;
-  --foreground: var(--color-bone);
-  --foreground-muted: #b9ada2;
-  --border: #3b302c;
-  --primary: var(--color-ember);
-  --primary-foreground: var(--color-bone);
-  --accent: #d07583; /* burgundy, lightened for text contrast on ink */
-  --sale: #d07583;
-  --success: var(--color-bone);
-  --ring: #d07583;
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
-  --shadow-card-hover: 0 22px 44px -20px rgb(0 0 0 / 0.7);
+  --background: #141311;
+  --surface: #1c1b18;
+  --surface-raised: #262420;
+  --foreground: #efeae0;
+  --foreground-muted: #a8a196;
+  --border: #33302b;
+  --input: #77716a;
+
+  --primary: #5ac576;
+  --primary-hover: #6ed889;
+  --primary-foreground: #141311;
+
+  --surface-inverse: #0d0c0b;
+  --surface-inverse-raised: #24221f;
+  --foreground-inverse: #efeae0;
+  --foreground-inverse-muted: #a9a297;
+  --border-inverse: #2a2824;
+
+  --sale: #e58a75;
+  --sale-foreground: #1a0e0b;
+  --danger: #e58a75;
+  --danger-foreground: #1a0e0b;
+  --danger-soft: #3a1e19;
+  --danger-soft-foreground: #f2b2a4;
+  --success: #7cc796;
+  --success-foreground: #0d1a11;
+  --success-soft: #16291d;
+  --success-soft-foreground: #a6ddb8;
+  --warning: #e2a85a;
+  --warning-foreground: #1f1505;
+  --warning-soft: #33240f;
+  --warning-soft-foreground: #eec78e;
+  --info: #8db8d6;
+  --info-foreground: #0b1820;
+  --info-soft: #15242f;
+  --info-soft-foreground: #b1d0e6;
+
+  --chart-1: #429a6c;
+  --chart-2: #b5811c;
+  --chart-3: #5788c7;
+  --chart-4: #ce6d4f;
+  --chart-5: #9b5a8e;
+  --chart-grid: #33302b;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.35);
+  --shadow-card-hover: 0 24px 44px -22px rgb(0 0 0 / 0.75);
+  --shadow-overlay: 0 24px 60px -20px rgb(0 0 0 / 0.7);
 }
 
-/* Larger small text: client feedback was that type felt too small. */
 @theme {
+  /* Only design-system colors exist as utilities. */
+  --color-*: initial;
+
+  /* Type scale: the two smallest steps are raised (client feedback: type felt
+     too small). Everything else follows Tailwind's scale. */
   --text-xs: 0.8125rem;
   --text-xs--line-height: 1.25rem;
   --text-sm: 0.9375rem;
@@ -69,22 +179,49 @@
   --color-foreground: var(--foreground);
   --color-foreground-muted: var(--foreground-muted);
   --color-border: var(--border);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-accent: var(--accent);
-  --color-sale: var(--sale);
-  --color-success: var(--success);
-  --color-ring: var(--ring);
-  --color-bone: var(--color-bone);
-  --color-charcoal: var(--color-charcoal);
-  --color-ember: var(--color-ember);
-  /* legacy names kept as aliases of the 3-color palette */
-  --color-brass: var(--accent);
-  --color-sage: var(--success);
-  --color-oxblood: var(--color-ember);
+  --color-input: var(--input);
 
-  --font-display: var(--font-playfair), ui-serif, Georgia, serif;
-  --font-sans: var(--font-dm-sans), var(--font-noto-jp), ui-sans-serif, system-ui, sans-serif;
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-surface-inverse: var(--surface-inverse);
+  --color-surface-inverse-raised: var(--surface-inverse-raised);
+  --color-foreground-inverse: var(--foreground-inverse);
+  --color-foreground-inverse-muted: var(--foreground-inverse-muted);
+  --color-border-inverse: var(--border-inverse);
+
+  --color-sale: var(--sale);
+  --color-sale-foreground: var(--sale-foreground);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-soft-foreground: var(--danger-soft-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-soft: var(--success-soft);
+  --color-success-soft-foreground: var(--success-soft-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-soft: var(--warning-soft);
+  --color-warning-soft-foreground: var(--warning-soft-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-info-soft: var(--info-soft);
+  --color-info-soft-foreground: var(--info-soft-foreground);
+
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-grid: var(--chart-grid);
+  --color-scrim: var(--scrim);
+  --color-on-scrim: var(--on-scrim);
+
+  --font-display: var(--font-fraunces), var(--font-noto-serif-jp), ui-serif, Georgia, serif;
+  --font-sans: var(--font-manrope), var(--font-noto-sans-jp), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
   --animate-fade-up: fade-up 0.6s ease-out both;
@@ -101,36 +238,64 @@
   to { transform: translateX(-50%); }
 }
 
-* {
-  border-color: var(--border);
+@layer base {
+  /* In a layer so that border-* utilities (e.g. focus:border-foreground) win. */
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    border-color: var(--border);
+  }
+
+  html {
+    color-scheme: light;
+  }
+  html[data-theme="dark"] {
+    color-scheme: dark;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Japanese reads better with more leading and no negative tracking. */
+  :lang(ja) body {
+    line-height: 1.8;
+  }
+
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: var(--foreground);
+    color: var(--background);
+  }
 }
 
-html {
-  color-scheme: light;
-}
-html[data-theme="dark"] {
-  color-scheme: dark;
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
-  font-size: 1rem;
-  line-height: 1.6;
+@layer components {
+  /* Display serif defaults; utilities (font-medium, tracking-*) still override. */
+  .font-display {
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    font-optical-sizing: auto;
+  }
+  :lang(ja) .font-display {
+    letter-spacing: 0.02em;
+  }
 }
 
-h1, h2, h3, .font-display {
-  letter-spacing: -0.01em;
-}
-
-::selection {
-  background: var(--primary);
-  color: var(--primary-foreground);
-}
-
-.font-display {
-  font-family: var(--font-display);
+/* Small uppercase label above headings ("Frozen at peak · Delivered…").
+   Pair with a color utility: text-foreground-muted on surfaces,
+   text-on-scrim/80 on photos. */
+@utility eyebrow {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 /* Subtle film-grain overlay used on hero/card surfaces */
@@ -146,10 +311,6 @@ h1, h2, h3, .font-display {
   opacity: 0.05;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-}
-
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
 }
 
 @media print {

@@ -15,7 +15,7 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
       <div className="flex flex-wrap gap-2">
         {STATUSES.map((s) => (
           <Link key={s} href={`/admin/orders?status=${s}`}>
-            <Button variant={status === s ? "primary" : "outline"} size="sm" className="capitalize">
+            <Button variant={status === s ? "ink" : "outline"} size="sm" className="capitalize">
               {s}
             </Button>
           </Link>
@@ -42,7 +42,7 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
               <TableCell className="tabular-nums">{formatJpy(o.totalJpy)}</TableCell>
               <TableCell><OrderStatusBadge status={o.status} /></TableCell>
               <TableCell>
-                <Button variant="ghost" size="sm" asChild>
+                <Button variant="link" size="sm" asChild>
                   <Link href={`/admin/orders/${o.id}`}>Manage</Link>
                 </Button>
               </TableCell>

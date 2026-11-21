@@ -32,7 +32,7 @@ export default async function RecipesPage({ params }: { params: Promise<{ locale
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
-            <h2 className="mt-3 font-display text-xl group-hover:text-primary">{locale === "ja" ? r.titleJa : r.titleEn}</h2>
+            <h2 className="mt-3 font-display text-xl underline-offset-4 group-hover:underline">{locale === "ja" ? r.titleJa : r.titleEn}</h2>
             <p className="mt-1 text-sm text-foreground-muted">{locale === "ja" ? r.excerptJa : r.excerptEn}</p>
             <div className="mt-3 flex items-center gap-4 text-xs text-foreground-muted">
               <span className="flex items-center gap-1">

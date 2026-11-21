@@ -38,7 +38,7 @@ export function InquiryRow({
           </div>
           <div className="flex gap-1">
             <Badge variant="outline">{inquiry.kind}</Badge>
-            <Badge variant={inquiry.status === "open" ? "sale" : inquiry.status === "replied" ? "new" : "outline"}>{inquiry.status}</Badge>
+            <Badge variant={inquiry.status === "open" ? "warning" : inquiry.status === "replied" ? "success" : "outline"}>{inquiry.status}</Badge>
           </div>
         </div>
         <p className="mt-2 text-sm text-foreground-muted">{inquiry.message}</p>

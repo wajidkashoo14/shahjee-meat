@@ -41,14 +41,14 @@ export function QuestionModerationRow({
       <CardContent className="pt-6">
         <div className="flex items-start justify-between">
           <p className="text-sm font-medium">{question.productName}</p>
-          <Badge variant={question.status === "answered" ? "new" : question.status === "hidden" ? "outline" : "sale"}>{question.status}</Badge>
+          <Badge variant={question.status === "answered" ? "success" : question.status === "hidden" ? "outline" : "warning"}>{question.status}</Badge>
         </div>
         <p className="mt-2">Q. {question.body}</p>
         <p className="mt-1 text-xs text-foreground-muted">— {question.authorName}</p>
 
         {question.answers.map((a) => (
           <div key={a.id} className="mt-3 rounded-xl bg-surface-raised p-3 text-sm">
-            <p className="mb-1 text-xs font-semibold text-primary">{a.authorName}</p>
+            <p className="mb-1 text-xs font-semibold text-foreground">{a.authorName}</p>
             {a.body}
           </div>
         ))}

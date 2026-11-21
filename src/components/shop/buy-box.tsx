@@ -67,7 +67,7 @@ export function BuyBox({ product, variants, initiallyWishlisted }: { product: Pr
   return (
     <div className="flex flex-col gap-5">
       <div>
-        {product.grade === "wagyu" && <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-brass">Wagyu</p>}
+        {product.grade === "wagyu" && <p className="eyebrow mb-2 text-foreground-muted">Wagyu</p>}
         <h1 className="font-display text-3xl sm:text-4xl">{name}</h1>
         {subtitle && <p className="mt-1 text-foreground-muted">{subtitle}</p>}
         {product.ratingCount > 0 && (
@@ -79,7 +79,7 @@ export function BuyBox({ product, variants, initiallyWishlisted }: { product: Pr
 
       {selected && (
         <div className="flex items-baseline gap-3">
-          <span className="text-2xl font-semibold tabular-nums">{formatJpy(selected.priceJpy)}</span>
+          <span className={`text-3xl font-bold tabular-nums ${selected.compareAtPriceJpy ? "text-sale" : ""}`}>{formatJpy(selected.priceJpy)}</span>
           {selected.compareAtPriceJpy && (
             <span className="text-base text-foreground-muted line-through tabular-nums">{formatJpy(selected.compareAtPriceJpy)}</span>
           )}
@@ -88,15 +88,15 @@ export function BuyBox({ product, variants, initiallyWishlisted }: { product: Pr
       )}
 
       <div>
-        <p className="mb-2 text-sm font-medium">{t("size")}</p>
+        <p className="mb-2 text-sm font-semibold">{t("size")}</p>
         <div className="flex flex-wrap gap-2">
           {variants.map((v) => (
             <button
               key={v.id}
               onClick={() => setSelectedId(v.id)}
               disabled={v.stock === 0}
-              className={`rounded-xl border px-3 py-2 text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
-                selectedId === v.id ? "border-primary bg-primary/10 text-primary" : "border-border hover:border-primary/60"
+              className={`rounded-xl border px-3 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+                selectedId === v.id ? "border-foreground bg-foreground text-background" : "border-input bg-surface hover:border-foreground"
               }`}
             >
               {locale === "ja" ? v.labelJa : v.labelEn}
@@ -108,7 +108,7 @@ export function BuyBox({ product, variants, initiallyWishlisted }: { product: Pr
 
       {!soldOut ? (
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-3 rounded-full border border-border px-3 py-2">
+          <div className="flex items-center gap-3 rounded-full border border-input bg-surface px-3 py-2">
             <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} aria-label="Decrease quantity">
               <Minus className="size-4" />
             </button>
@@ -120,8 +120,8 @@ export function BuyBox({ product, variants, initiallyWishlisted }: { product: Pr
           <AddToCartButton variantId={selected!.id} quantity={quantity} size="lg" className="flex-1" />
         </div>
       ) : (
-        <div className="rounded-xl border border-border p-4">
-          <p className="mb-2 text-sm font-medium">{t("notifyWhenBack")}</p>
+        <div className="rounded-xl border border-border bg-surface p-4">
+          <p className="mb-2 text-sm font-semibold">{t("notifyWhenBack")}</p>
           {alertSent ? (
             <p className="text-sm text-success">{t("notifyConfirmed")}</p>
           ) : (

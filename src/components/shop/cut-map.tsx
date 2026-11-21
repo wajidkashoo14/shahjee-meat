@@ -29,18 +29,26 @@ export function CutMap() {
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_280px] lg:items-center">
       <div className="relative rounded-3xl border border-border bg-surface p-6">
         <svg viewBox="0 0 480 300" className="w-full" role="img" aria-label={t("cutMapAlt")}>
-          <ellipse cx="240" cy="150" rx="230" ry="130" fill="var(--color-surface-raised)" opacity="0.3" />
+          <ellipse cx="240" cy="150" rx="230" ry="130" className="fill-surface-raised" opacity="0.7" />
           {REGIONS.map((r) => (
             <path
               key={r.id}
               d={r.path}
+              role="link"
+              tabIndex={0}
+              aria-label={locale === "ja" ? r.labelJa : r.labelEn}
               className={cn(
-                "cursor-pointer stroke-border transition-colors",
-                hovered === r.id ? "fill-primary" : "fill-[var(--color-surface-raised)] hover:fill-primary/60",
+                "cursor-pointer stroke-surface outline-none transition-colors",
+                hovered === r.id ? "fill-foreground" : "fill-border",
               )}
-              strokeWidth={1.5}
+              strokeWidth={2}
               onMouseEnter={() => setHovered(r.id)}
               onMouseLeave={() => setHovered(null)}
+              onFocus={() => setHovered(r.id)}
+              onBlur={() => setHovered(null)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") router.push(`/collections/beef?cut=${r.cut}`);
+              }}
               onClick={() => router.push(`/collections/beef?cut=${r.cut}`)}
             />
           ))}
@@ -50,7 +58,10 @@ export function CutMap() {
               x={r.labelPos[0]}
               y={r.labelPos[1]}
               textAnchor="middle"
-              className="pointer-events-none select-none fill-foreground text-[9px] font-medium"
+              className={cn(
+                "pointer-events-none select-none text-[9px] font-semibold transition-colors",
+                hovered === r.id ? "fill-background" : "fill-foreground",
+              )}
             >
               {locale === "ja" ? r.labelJa : r.labelEn}
             </text>

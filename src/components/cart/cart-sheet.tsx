@@ -52,7 +52,7 @@ export function CartSheet() {
         <div className="px-6">
           <div className="h-2 w-full overflow-hidden rounded-full bg-surface-raised">
             <div
-              className="h-full rounded-full bg-primary transition-all duration-500"
+              className="h-full rounded-full bg-foreground transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -80,7 +80,7 @@ export function CartSheet() {
                   <div className="flex flex-1 flex-col gap-1">
                     <div className="flex items-start justify-between gap-2">
                       <p className="text-sm font-medium leading-tight">{item.nameEn}</p>
-                      <button onClick={() => remove(item.id)} className="text-foreground-muted hover:text-sale" aria-label="Remove">
+                      <button onClick={() => remove(item.id)} className="text-foreground-muted hover:text-danger" aria-label="Remove">
                         <Trash2 className="size-4" />
                       </button>
                     </div>

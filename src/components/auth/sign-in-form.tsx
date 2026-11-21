@@ -69,7 +69,7 @@ export function SignInForm() {
           <div>
             <div className="flex items-center justify-between">
               <Label htmlFor="signin-password">{t("password")}</Label>
-              <Link href="/forgot-password" className="text-xs text-primary hover:underline">
+              <Link href="/forgot-password" className="text-xs text-foreground-muted underline underline-offset-4 hover:text-foreground">
                 {t("forgotPassword")}
               </Link>
             </div>
@@ -81,7 +81,7 @@ export function SignInForm() {
           </Button>
         </form>
       ) : magicSent ? (
-        <p className="rounded-xl border border-border bg-surface p-4 text-sm text-success">{t("magicLinkSent", { email })}</p>
+        <p className="rounded-xl border border-success/25 bg-success-soft p-4 text-sm text-success-soft-foreground">{t("magicLinkSent", { email })}</p>
       ) : (
         <form onSubmit={handleMagicLink} className="flex flex-col gap-4">
           <div>
@@ -107,7 +107,7 @@ export function SignInForm() {
 
       <p className="text-center text-sm text-foreground-muted">
         {t("noAccount")}{" "}
-        <Link href="/sign-up" className="text-primary hover:underline">
+        <Link href="/sign-up" className="font-semibold text-foreground underline decoration-foreground/30 underline-offset-4 hover:decoration-foreground">
           {t("signUp")}
         </Link>
       </p>

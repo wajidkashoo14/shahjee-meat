@@ -51,7 +51,7 @@ export function ProductCard({ data }: { data: ProductCardData }) {
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
             />
           )}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-charcoal/35 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-scrim/35 to-transparent" />
           <div className="absolute left-3 top-3 flex flex-col items-start gap-1.5">
             {soldOut && <Badge variant="soldout">{t("soldOut")}</Badge>}
             {!soldOut && onSale && <Badge variant="sale">{t("sale")}</Badge>}
@@ -61,7 +61,7 @@ export function ProductCard({ data }: { data: ProductCardData }) {
         </div>
       </Link>
       <button
-        className="absolute right-3 top-3 flex size-9 items-center justify-center rounded-full bg-surface/90 text-foreground shadow-sm backdrop-blur transition-all hover:text-primary sm:opacity-0 sm:group-hover:opacity-100"
+        className="absolute right-3 top-3 flex size-9 items-center justify-center rounded-full bg-surface/90 text-foreground shadow-sm backdrop-blur transition-all hover:text-sale sm:opacity-0 sm:group-hover:opacity-100"
         aria-label={t("addToWishlist")}
         onClick={(e) => e.preventDefault()}
       >
@@ -73,14 +73,14 @@ export function ProductCard({ data }: { data: ProductCardData }) {
           <p className="truncate text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground-muted sm:text-xs">{kicker}</p>
         )}
         <Link href={`/products/${product.slug}`}>
-          <h3 className="line-clamp-2 font-display text-base leading-snug transition-colors hover:text-primary sm:text-lg">{name}</h3>
+          <h3 className="line-clamp-2 font-display text-base leading-snug decoration-1 underline-offset-4 hover:underline sm:text-lg">{name}</h3>
         </Link>
         {product.ratingCount > 0 && <StarRating rating={product.ratingAvg} count={product.ratingCount} />}
 
         <div className="mt-auto flex items-end justify-between gap-2 pt-3">
           <div className="min-w-0">
             <div className="flex flex-wrap items-baseline gap-x-2">
-              <span className="text-base font-bold tabular-nums text-primary sm:text-lg">
+              <span className={`text-base font-bold tabular-nums sm:text-lg ${onSale ? "text-sale" : "text-foreground"}`}>
                 {hasRange && <span className="mr-1 text-xs font-medium text-foreground-muted">{t("from")}</span>}
                 {formatJpy(minPrice)}
               </span>
@@ -106,7 +106,7 @@ export function ProductCard({ data }: { data: ProductCardData }) {
           {soldOut && (
             <Link
               href={`/products/${product.slug}`}
-              className="min-w-0 max-w-[55%] truncate rounded-full border border-border px-3 py-2 text-xs font-medium text-foreground-muted transition-colors hover:border-primary hover:text-primary"
+              className="min-w-0 max-w-[55%] truncate rounded-full border border-input px-3 py-2 text-xs font-semibold text-foreground-muted transition-colors hover:border-foreground hover:text-foreground"
             >
               {t("notifyMe")}
             </Link>

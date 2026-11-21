@@ -5,11 +5,11 @@ export function StarRating({ rating, count, size = "sm" }: { rating: number; cou
   const starSize = size === "sm" ? "size-3.5" : "size-4";
   return (
     <div className="flex items-center gap-1.5">
-      <div className="flex">
+      <div className="flex" role="img" aria-label={`${rating.toFixed(1)} / 5`}>
         {Array.from({ length: 5 }).map((_, i) => (
           <Star
             key={i}
-            className={cn(starSize, i < Math.round(rating) ? "fill-brass text-brass" : "fill-none text-foreground-muted/40")}
+            className={cn(starSize, i < Math.round(rating) ? "fill-foreground text-foreground" : "fill-none text-foreground-muted/45")}
           />
         ))}
       </div>

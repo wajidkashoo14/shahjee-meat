@@ -96,7 +96,7 @@ export default async function ProductPage({ params }: { params: Promise<{ locale
 
       {related.length > 0 && (
         <div className="mt-20">
-          <ProductRow title={t("relatedProducts")} items={related.map((r) => toCardData(r))} />
+          <ProductRow title={t("relatedProducts")} items={related.map((r) => toCardData(r))} fullRows />
         </div>
       )}
 

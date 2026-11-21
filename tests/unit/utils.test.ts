@@ -3,8 +3,12 @@ import { formatJpy, formatPer100g, slugify, cn } from "@/lib/utils";
 
 describe("formatJpy", () => {
   it("formats a zero-decimal JPY amount with the yen sign and thousands separators", () => {
-    expect(formatJpy(4980)).toBe("￥4,980");
-    expect(formatJpy(0)).toBe("￥0");
+    expect(formatJpy(4980)).toBe("¥4,980");
+    expect(formatJpy(0)).toBe("¥0");
+  });
+
+  it("uses the standard yen sign, not the full-width one the ja-JP locale emits", () => {
+    expect(formatJpy(4980)).not.toContain("￥");
   });
 
   it("never shows decimal places (JPY is zero-decimal)", () => {
@@ -14,7 +18,7 @@ describe("formatJpy", () => {
 
 describe("formatPer100g", () => {
   it("computes a proportional price per 100g", () => {
-    expect(formatPer100g(2000, 500)).toBe("￥400 / 100g");
+    expect(formatPer100g(2000, 500)).toBe("¥400 / 100g");
   });
 
   it("returns an empty string when weight is zero to avoid a divide-by-zero", () => {

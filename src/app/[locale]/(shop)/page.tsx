@@ -35,16 +35,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           priority
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/60 to-charcoal/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-scrim/90 via-scrim/50 to-scrim/10" />
         <div className="relative mx-auto w-full max-w-7xl px-4 pb-16 sm:px-6">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-bone/85">{t("heroKicker")}</p>
-          <h1 className="max-w-2xl font-display text-5xl leading-[1.05] text-bone sm:text-7xl">{t("heroTitle")}</h1>
-          <p className="mt-5 max-w-lg text-bone/80">{t("heroSubtitle")}</p>
+          <p className="eyebrow mb-4 text-on-scrim/80">{t("heroKicker")}</p>
+          <h1 className="max-w-3xl font-display text-5xl leading-[1.02] tracking-[-0.025em] text-on-scrim sm:text-7xl">{t("heroTitle")}</h1>
+          <p className="mt-5 max-w-lg text-lg text-on-scrim/85">{t("heroSubtitle")}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button size="lg" asChild>
               <Link href="/collections/beef">{t("heroCtaShop")}</Link>
             </Button>
-            <Button size="lg" variant="secondary" asChild>
+            <Button size="lg" variant="inverseOutline" asChild>
               <Link href="/recipes">{t("heroCtaRecipes")}</Link>
             </Button>
           </div>
@@ -63,34 +63,43 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
         {/* Category bento */}
-        <h2 className="font-display text-3xl">{t("shopByCategory")}</h2>
-        <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {PRIMARY_CATEGORIES.map((c, i) => (
-            <Link
-              key={c.slug}
-              href={`/collections/${c.slug}`}
-              className={`group relative overflow-hidden rounded-2xl ${i === 0 ? "col-span-2 row-span-2" : ""}`}
-            >
-              <div className={`relative ${i === 0 ? "aspect-square sm:aspect-[4/3]" : "aspect-square"}`}>
-                <Image
-                  src={collectionPhoto(c.slug)}
-                  alt={c.labelEn}
-                  fill
-                  sizes="(min-width: 1024px) 25vw, 50vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 to-transparent" />
-              </div>
-              <span className="absolute bottom-3 left-4 font-display text-lg text-bone sm:text-xl">
-                {locale === "ja" ? c.labelJa : c.labelEn}
-              </span>
-            </Link>
-          ))}
+        <h2 className="font-display text-3xl sm:text-4xl">{t("shopByCategory")}</h2>
+        {/* Feature tile + five tiles: fills a 3×3 grid exactly (sm+); on phones the last tile runs full width. */}
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+          {PRIMARY_CATEGORIES.map((c, i) => {
+            const feature = i === 0;
+            const last = i === PRIMARY_CATEGORIES.length - 1;
+            return (
+              <Link
+                key={c.slug}
+                href={`/collections/${c.slug}`}
+                className={`group relative overflow-hidden rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${feature ? "col-span-2 sm:row-span-2" : last ? "col-span-2 sm:col-span-1" : ""}`}
+              >
+                <div
+                  className={`relative ${feature ? "aspect-[4/3] sm:aspect-auto sm:h-full" : last ? "aspect-[2/1] sm:aspect-[4/3]" : "aspect-square sm:aspect-[4/3]"}`}
+                >
+                  <Image
+                    src={collectionPhoto(c.slug)}
+                    alt={c.labelEn}
+                    fill
+                    sizes={feature ? "(min-width: 640px) 66vw, 100vw" : "(min-width: 640px) 33vw, 50vw"}
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-scrim/80 via-scrim/10 to-transparent" />
+                </div>
+                <span
+                  className={`absolute bottom-3 left-4 font-display text-on-scrim sm:bottom-4 sm:left-5 ${feature ? "text-2xl sm:text-3xl" : "text-lg sm:text-xl"}`}
+                >
+                  {locale === "ja" ? c.labelJa : c.labelEn}
+                </span>
+              </Link>
+            );
+          })}
         </div>
 
         {/* New arrivals */}
         <div className="mt-20">
-          <ProductRow title={t("newArrivals")} items={newArrivals} />
+          <ProductRow title={t("newArrivals")} items={newArrivals} fullRows />
         </div>
 
         {/* Cut map */}
@@ -100,15 +109,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
         {/* Best sellers */}
         <div className="mt-20">
-          <ProductRow title={t("bestSellers")} items={bestSellers} />
+          <ProductRow title={t("bestSellers")} items={bestSellers} fullRows />
         </div>
 
         {/* Recipes */}
         {recipes.length > 0 && (
           <section className="mt-20">
             <div className="flex items-baseline justify-between">
-              <h2 className="font-display text-3xl">{t("recipeHighlights")}</h2>
-              <Link href="/recipes" className="text-sm text-primary hover:underline">
+              <h2 className="font-display text-3xl sm:text-4xl">{t("recipeHighlights")}</h2>
+              <Link href="/recipes" className="text-sm font-semibold text-foreground underline decoration-foreground/30 underline-offset-4 hover:decoration-foreground">
                 {t("viewAllRecipes")}
               </Link>
             </div>
@@ -124,7 +133,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
-                  <h3 className="mt-3 font-display text-lg group-hover:text-primary">
+                  <h3 className="mt-3 font-display text-lg underline-offset-4 group-hover:underline">
                     {locale === "ja" ? r.titleJa : r.titleEn}
                   </h3>
                   <p className="mt-1 text-sm text-foreground-muted">{locale === "ja" ? r.excerptJa : r.excerptEn}</p>
@@ -135,8 +144,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         )}
 
         {/* Newsletter */}
-        <section className="mt-24 flex flex-col items-center gap-4 rounded-3xl border border-border bg-surface p-10 text-center">
-          <h2 className="font-display text-3xl">{t("newsletterTitle")}</h2>
+        <section className="mt-24 flex flex-col items-center gap-4 rounded-3xl border border-border bg-surface p-8 text-center shadow-[var(--shadow-card)] sm:p-12">
+          <h2 className="font-display text-3xl sm:text-4xl">{t("newsletterTitle")}</h2>
           <p className="max-w-md text-foreground-muted">{t("newsletterSubtitle")}</p>
           <NewsletterForm />
         </section>
@@ -148,8 +157,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 function Trust({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="text-primary">{icon}</span>
-      <span className="text-sm">{label}</span>
+      <span className="text-foreground">{icon}</span>
+      <span className="text-sm font-medium">{label}</span>
     </div>
   );
 }

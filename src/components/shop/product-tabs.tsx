@@ -2,7 +2,7 @@
 import { useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { ThumbsUp, BadgeCheck, Snowflake } from "lucide-react";
+import { ThumbsUp, BadgeCheck, Snowflake, Star } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
@@ -119,7 +119,7 @@ function ReviewsPanel({ productId, reviews }: { productId: string; reviews: Revi
     <div className="grid grid-cols-1 gap-10 lg:grid-cols-[280px_1fr]">
       <div>
         <div className="flex items-baseline gap-3">
-          <span className="text-4xl font-display">{avg.toFixed(1)}</span>
+          <span className="font-display text-5xl tabular-nums">{avg.toFixed(1)}</span>
           <StarRating rating={avg} size="md" />
         </div>
         <p className="mt-1 text-sm text-foreground-muted">{t("tabs.reviews", { count: reviews.length })}</p>
@@ -128,7 +128,7 @@ function ReviewsPanel({ productId, reviews }: { productId: string; reviews: Revi
             <div key={b.star} className="flex items-center gap-2 text-xs">
               <span className="w-3">{b.star}</span>
               <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-raised">
-                <div className="h-full bg-brass" style={{ width: `${reviews.length ? (b.count / reviews.length) * 100 : 0}%` }} />
+                <div className="h-full rounded-full bg-foreground" style={{ width: `${reviews.length ? (b.count / reviews.length) * 100 : 0}%` }} />
               </div>
               <span className="w-6 text-right text-foreground-muted">{b.count}</span>
             </div>
@@ -140,11 +140,11 @@ function ReviewsPanel({ productId, reviews }: { productId: string; reviews: Revi
           </Button>
         )}
         {showForm && !submitted && (
-          <div className="mt-4 flex flex-col gap-3 rounded-xl border border-border p-4">
+          <div className="mt-4 flex flex-col gap-3 rounded-xl border border-border bg-surface p-4">
             <div className="flex gap-1">
               {[1, 2, 3, 4, 5].map((s) => (
-                <button key={s} onClick={() => setRating(s)} aria-label={`${s} stars`}>
-                  <StarRating rating={s <= rating ? 5 : 0} />
+                <button key={s} onClick={() => setRating(s)} aria-label={`${s} stars`} aria-pressed={s <= rating}>
+                  <Star className={s <= rating ? "size-6 fill-foreground text-foreground" : "size-6 text-foreground-muted/45"} />
                 </button>
               ))}
             </div>
@@ -230,7 +230,7 @@ function QAPanel({ productId, qa }: { productId: string; qa: QA[] }) {
             <p className="mt-1 text-xs text-foreground-muted">{q.authorName}</p>
             {q.answers.map((a) => (
               <div key={a.id} className="mt-3 rounded-xl bg-surface-raised p-3 text-sm">
-                <p className="mb-1 flex items-center gap-1 text-xs font-semibold text-primary">
+                <p className="mb-1 flex items-center gap-1 text-xs font-semibold text-foreground">
                   <Snowflake className="size-3.5" /> {a.authorName}
                 </p>
                 {a.body}

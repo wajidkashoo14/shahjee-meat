@@ -30,10 +30,10 @@ export default async function CollectionsIndexPage({ params }: { params: Promise
                 sizes="(min-width: 1024px) 33vw, 50vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/10 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-scrim/80 via-scrim/10 to-transparent" />
             </div>
             <div className="absolute inset-x-0 bottom-0 p-5">
-              <h2 className="font-display text-2xl text-bone">{locale === "ja" ? c.titleJa : c.titleEn}</h2>
+              <h2 className="font-display text-2xl text-on-scrim">{locale === "ja" ? c.titleJa : c.titleEn}</h2>
             </div>
           </Link>
         ))}
