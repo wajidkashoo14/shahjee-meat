@@ -45,7 +45,8 @@ test("guest can browse, check out, and see the order; admin can fulfill it", asy
   // 4. Place the order (Stripe isn't configured in this environment, so a
   // "test payment" button finalizes the order directly).
   await page.getByRole("button", { name: /place order/i }).click();
-  await expect(page.getByText(/order confirmed/i)).toBeVisible({ timeout: 15_000 });
+  // A heading, not any text: Next's route announcer repeats the page heading for screen readers.
+  await expect(page.getByRole("heading", { name: /order confirmed/i })).toBeVisible({ timeout: 15_000 });
   const orderNumberText = await page.getByText(/^WC\d{6}-\d{4}$/).textContent();
   expect(orderNumberText).toBeTruthy();
 
