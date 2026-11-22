@@ -108,51 +108,6 @@ export async function placeOrder(cartId: string, userId: string | null, info: Sh
       });
 
     for (const line of pricing.lines) {
-      // Atomic reserve: only succeeds if enough stock remains (safe under concurrency).
-      const reserved = await tx
-        .update(productVariants)
-        .set({ stock: sql`${productVariants.stock} - ${line.quantity}` })
-        .where(and(eq(productVariants.id, line.variantId), gte(productVariants.stock, line.quantity)))
-        .returning({ id: productVariants.id });
-      if (reserved.length === 0) {
-        throw new OutOfStockError(`Not enough stock for variant ${line.variantId}`);
-      }
-      await tx.insert(inventoryMovements)
-        .values({ id: uuidv7(), variantId: line.variantId, change: -line.quantity, reason: "order", note: orderNo });
-    }
-
-    await tx.insert(orders)
-      .values({
-        id: orderId,
-        orderNumber: orderNo,
-        userId,
-        email: info.email,
-        status: "paid",
-        subtotalJpy: pricing.subtotalJpy,
-        shippingJpy: pricing.shippingJpy,
-        discountJpy: pricing.discountJpy,
-        taxJpy: pricing.taxJpy,
-        totalJpy: pricing.totalJpy,
-        pointsEarned: pricing.pointsEarned,
-        pointsRedeemed: info.redeemPoints ?? 0,
-        promoCode: info.promoCode || null,
-        shippingName: info.fullName,
-        shippingNameKana: info.fullNameKana,
-        shippingPhone: info.phone,
-        shippingPostalCode: info.postalCode,
-        shippingPrefecture: info.prefecture,
-        shippingCity: info.city,
-        shippingAddressLine1: info.addressLine1,
-        shippingAddressLine2: info.addressLine2 || "",
-        deliveryDate: info.deliveryDate,
-        deliverySlot: info.deliverySlot,
-        giftNote: info.giftNote || "",
-        paymentMethod: info.paymentMethod,
-        paymentIntentId: info.paymentIntentId ?? null,
-        cancelCutoffAt: new Date(Date.now() + 12 * 3600 * 1000),
-      });
-
-    for (const line of pricing.lines) {
       const [variant] = await tx.select().from(productVariants).where(eq(productVariants.id, line.variantId)).limit(1);
       const [product] = await tx.select().from(products).where(eq(products.id, line.productId)).limit(1);
       const [image] = await tx.select().from(productImages).where(eq(productImages.productId, line.productId)).limit(1);
