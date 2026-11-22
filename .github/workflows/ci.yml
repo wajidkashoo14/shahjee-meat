@@ -8,10 +8,30 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+    # A throwaway Postgres for the migrate, seed, build and e2e steps.
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: wholecuts
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d wholecuts"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      # Points at the service above; not a secret.
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/wholecuts
+
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: npm
@@ -30,7 +50,8 @@ jobs:
 
       - name: Set up database
         run: |
-          cp .env.example .env.local
+          # The example env with DATABASE_URL pointed at the CI database.
+          sed "s#^DATABASE_URL=.*#DATABASE_URL=${DATABASE_URL}#" .env.example > .env.local
           npm run db:migrate
           npm run db:seed
 
